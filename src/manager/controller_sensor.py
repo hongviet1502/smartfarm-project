@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, render_template
-# from src import db
+from src import db
 
 sensor = Blueprint('sensor', __name__)
 
@@ -17,4 +17,5 @@ def load_init_sensor():
     elif request.method == 'POST':
         data = request.get_json()
         print(data)
+        
         return jsonify({'msg':'ok'})
