@@ -1,0 +1,216 @@
+<div class="header">
+
+    <div class=""></div>
+    <div class="header__notification">
+        <div class="" data-bs-toggle="dropdown">
+            <span class="position-relative">
+                <i class="fa-regular fa-bell"></i>
+                <span class="header__notification__badge"></span>
+            </span>
+        </div>
+        {% include 'components/header/notification.html' %}
+    </div>
+    <div class="header__user">
+        <div class="header__user__wrapper" data-bs-toggle="dropdown">
+            <div class="header__user__img-container">
+                <img src="{{url_for( 'static',filename='MU.png' )}}" alt="avatar">
+            </div>
+            <span class="header__user__username">vietdeptrai</span>
+        </div>
+        {% include 'components/header/user.html' %}
+    </div>
+    <div class="header__dropdown">
+        <div class="header__dropdown__wrapper" data-bs-toggle="dropdown">
+            <!-- <i class="fa-solid fa-angle-down" id="changeFarm"></i> -->
+        </div>
+        <!-- {% include 'components/header/change-greenhouse.html' %} -->
+    </div>
+
+</div>
+
+<script>
+    let r = (Math.random() + 1).toString(36).substring(7);
+    const source = new EventSource(`/notify/${r}`);
+    source.onmessage = function (event) {
+        let res = JSON.parse(event.data);
+        let total_notify = res['house'] + res['createrelay']+ res["deleterelay"] + res["updaterelay"] + res['sensor'] +  res['update'];
+        if (total_notify != Number($('.header__notification__badge').text())) {
+            $('.header__notification__badge').css('display', "flex");
+            $('.header__notification__badge').text(total_notify);
+            // $('.notify-title').text("Thông báo (" + total_notify + ")");
+        }
+    }
+    $(".header__notification i").click(function () {
+        $(".header__notification__badge").css("display", "none")
+        $.ajax({
+            type: 'GET',
+            url: '/auth/notifications/',
+            contentType: "application/json;charset=utf-8",
+            dataType: 'json',
+            success: function (response) {
+                $(".header__notification__content").empty()
+
+                let temp = (window.location.href).split('/')
+                let link = temp[0] + '//' + temp[2] + '/static/icons/'
+                for (let index in response) {
+                    let notification = response[index];
+                    // console.log(notification)
+                    if (notification['type_notification'] == 0) {
+                        // new housse
+                        linkicons = link + 'home.svg';
+                    }
+                    else if (notification['type_notification'] == 1) {
+                        // new sensor
+                        linkicons = "https://img.icons8.com/fluency/48/000000/sensor.png"
+                    }
+                    else if (notification['type_notification'] == 2) {
+                        // new relay
+                        linkicons = "https://img.icons8.com/office/40/000000/relay.png"
+                    }
+                    else if (notification['type_notification'] == 3) {
+                        //
+                        linkicons = "https://img.icons8.com/fluency/48/000000/approve-and-update.png"
+                    }
+                    else {
+                        // udpate
+                        linkicons = "https://img.icons8.com/fluency/48/000000/change.png"
+                    }
+                    let notify_item = `
+                    <a href ="" class="header__notification__link">
+                        <li class="dropdown-item header__notification__item">
+                            <div class="header__notification__dropdown__image">
+                                <img src=${linkicons} alt="logo">
+                            </div>
+                            <div class="header__notification__dropdown__text">
+                                <div class="header__notification__dropdown__text__alert">
+                                    ${notification.message}
+                                </div>
+                                <div class="header__notification__dropdown__text__time">
+                                    ${notification.time_notification}
+                                </div>
+                            </div>
+                            <div class="header__notification__dropdown__status"><i class="fa-solid fa-circle"></i></div>
+                        </li>
+                    </a>
+                    `
+
+                    $(".header__notification__content").append(notify_item)
+
+                }
+            }
+        });
+    })
+</script>
+
+<style>
+    /* header */
+    .header {
+        --height: 50px;
+        --black-1: rgba(0, 0, 0, 0);
+        --black-2: rgba(0, 0, 0, 0.7);
+        --black-3: rgba(0, 0, 0, 0.5);
+        position: relative;
+        display: flex;
+        align-items: center;
+        height: var(--height);
+        background-color: white;
+        border-bottom: 1px solid rgba(209, 209, 209, 1);
+    }
+
+    .header>div {
+        padding: 0 10px;
+        margin: 0 10px;
+    }
+
+    .header>div:first-child {
+        flex-grow: 1;
+    }
+
+
+    /* notification */
+    .header__notification__link {
+        text-decoration: none;
+    }
+
+    .header__notification {
+        position: relative;
+        text-align: center;
+        font-size: 26px;
+        cursor: pointer;
+    }
+
+    .header__notification:hover {
+        color: var(--black-2)
+    }
+
+    .header__notification:active {
+        color: var(--black-3)
+    }
+
+    .header__notification__badge {
+        font-size: 12px;
+        background-color: #FF0000;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        color: white;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        display: none;
+    }
+
+    .header__notification--no-notification .header__notification__badge {
+        display: none;
+    }
+
+    /* user */
+    .header__user {}
+
+    .header__user__wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+    }
+
+    .header__user__img-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 40px;
+        aspect-ratio: 1/1;
+        margin-right: 5px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+
+    .header__user__img-container img {
+        display: block;
+        width: 100%;
+    }
+
+    .header__user__username {
+        text-align: center;
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    /* dropdown */
+    .header__dropdown {}
+
+    .header__dropdown__wrapper {
+        font-size: 22px;
+        cursor: pointer;
+    }
+
+    .header__dropdown__wrapper:hover {
+        color: var(--black-2)
+    }
+
+    .header__dropdown__wrapper:active {
+        color: var(--black-3)
+    }
+</style>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Đăng nhập</title>
+    <link rel="stylesheet" href=" {{ url_for( 'static',filename='css/login.css' ) }}">
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js "
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN "
+        crossorigin="anonymous "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js "
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q "
+        crossorigin="anonymous "></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js "
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl "
+        crossorigin="anonymous "></script>
+
+</head>
+
+<body>
+    <div class='container_main border'>
+
+        <div class='image-holder'>
+            <img src="{{ url_for( 'static',filename='MU.png' ) }}" class='image_logo' alt="logo">
+            <p class='application_name'> RALLIP SMART </p>
+        </div>
+
+        <div class='acc'>
+            <input type="text" name="username" id="username" placeholder="Tên đăng nhập">
+        </div>
+
+        <div class='pas'>
+            <input type="password" name="password" id="password" placeholder="Mật khẩu">
+            <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+        </div>
+
+        <div>
+            <!-- {% if error %}
+                <span class='state_login'> {{ error }} </span> {% endif %} -->
+            <span class='forget' data-toggle="modal" data-target="#exampleModal">Quên mật khẩu?</span>
+
+        </div>
+
+        <Button type="button" value="Submit" class='border login'
+            style="background: linear-gradient(45deg, #00ff99, #0575e6);">Đăng nhập</Button>
+
+    </div>
+
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Quên mật khẩu?</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Vui lòng liên hệ với quản trị viên để thực hiện cấp lại mật khẩu mới!
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    $(".toggle-password").click(function () {
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var input = $(".pas input");
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    });
+    $(".login").click(function(){
+        window.location.href = "/home"
+    })
+</script>
+
+</html>

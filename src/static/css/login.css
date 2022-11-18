@@ -1,0 +1,423 @@
+body {
+    background: url("../bg.jpg");
+    background-repeat: no-repeat;
+    background-size: 1920px 1098px;
+}
+
+/* DEFAULT FULL HD */
+.container_main {
+    position: absolute;
+    width: 28vw;
+    height: auto;
+    left: 35vw;
+    top: 15%;
+    background: #FFFFFF;
+    border-radius: 17px;
+    text-align: center;
+}
+.image-holder{
+    margin-top: 20px
+}
+
+.image_logo{
+    width: 40%;
+}
+
+.application_name{
+    font-weight: bolder;
+    font-size: 2.2vw;
+    padding: 5%;
+    background: -webkit-linear-gradient(#00ff99, #0575ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.product-name{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.container_main .smart {
+    font-family: Nirmala UI;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30.1398px;
+    line-height: 40px;
+    /* identical to box height */
+    text-align: center;
+    color: #2C698D;
+}
+
+.container_main .culture {
+    font-family: Nirmala UI;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 30.1398px;
+    line-height: 40px;
+    /* identical to box height */
+    text-align: center;
+    color: #b6ccda;
+}
+
+.container_main .acc input {
+    width: 80%;
+    border: none;
+    border-bottom: 1px solid #D3DFEF;
+    font-style: normal;
+    font-size: 1.125rem;
+    line-height: 25px;
+    outline: none;
+    cursor: pointer;
+    padding-left: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 40px;
+    padding-top: 5px;
+    background-color: white;
+    margin-top:20px
+}
+
+.container_main .pas input {
+    width: 76%;
+    border: none;
+    border-bottom: 1px solid #D3DFEF;
+    font-style: normal;
+    font-size: 1.125rem;
+    line-height: 25px;
+    outline: none;
+    cursor: pointer;
+    padding-left: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    height: 40px;
+    padding-top: 5px;
+    background-color: white;
+    margin-top:20px
+}
+
+.container_main .state_login {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-style: normal;
+    font-size: 13px;
+    line-height: 19px;
+    /* identical to box height, or 129% */
+    color: red;
+    /* width: 90%; */
+    float: left;
+    text-align: left;
+    margin-left: 10%;
+    padding-left: 10px;
+    margin-top: 20px;
+}
+
+.container_main .forget {
+    font-family: Arial, Helvetica, sans-serif;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 19px;
+    /* identical to box height, or 129% */
+    color: #2C698D;
+    /* width: 90%; */
+    float: right;
+    text-align: right;
+    margin-right: 10%;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.container_main .forget:hover {
+    color: #8ea9b8;
+}
+
+.login {
+    width: 80%;
+    background: #B8E5E6;
+    border-radius: 26.2911px;
+    height: 40px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: white;
+    font-weight: 500;
+    margin-top: 55px;
+    margin-bottom: 55px;
+}
+
+.login:hover {
+    background: #76dadb;
+}
+
+.login:active {
+    border: none;
+    outline: none;
+}
+
+.login:focus {
+    outline: none;
+}
+
+
+/* WIDTH TABLET */
+@media only screen and (min-width: 601px ) and (max-width: 900px) and (min-height: 600px){
+
+    .container_main {
+        position: absolute;
+        width: 30vw;
+        height: auto;
+        left: 35vw;
+        top: 20%;
+        background: #FFFFFF;
+        border-radius: 17px;
+        text-align: center;
+    }
+    
+    .container_main .smart {
+        font-family: Nirmala UI;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 21px;
+        line-height: 40px;
+        /* identical to box height */
+        text-align: center;
+        color: #2C698D;
+    }
+    
+    .container_main .culture {
+        font-family: Nirmala UI;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 21px;
+     
+        /* identical to box height */
+        text-align: center;
+        color: #b6ccda;
+    }
+    
+    .container_main .acc input {
+        width: 80%;
+        border: none;
+        border-bottom: 1px solid #D3DFEF;
+        font-style: normal;
+        font-size: 15px;
+        line-height: 25px;
+        outline: none;
+        cursor: pointer;
+        padding-left: 7px;
+        font-family: Arial, Helvetica, sans-serif;
+        height: 29px;
+        padding-top: 4px;
+        background-color: white;
+       
+    }
+    .container_main .pas input{
+        width: 76%;
+        border: none;
+        border-bottom: 1px solid #D3DFEF;
+        font-style: normal;
+        font-size: 15px;
+        line-height: 25px;
+        outline: none;
+        cursor: pointer;
+        padding-left: 7px;
+        font-family: Arial, Helvetica, sans-serif;
+        height: 29px;
+        padding-top: 4px;
+        background-color: white;
+       
+    }    
+    
+    .fa-fw{
+        width: 0.55rem;
+        text-align: center;
+    }
+
+    .container_main .state_login {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        font-style: normal;
+        font-size: 13px;
+        line-height: 19px;
+        /* identical to box height, or 129% */
+        color: red;
+        /* width: 90%; */
+        float: left;
+        text-align: left;
+        margin-left: 10%;
+        padding-left: 10px;
+    }
+    
+    .container_main .forget {
+        font-family: Arial, Helvetica, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 13px;
+        line-height: 19px;
+        /* identical to box height, or 129% */
+        color: #2C698D;
+        /* width: 90%; */
+        float: right;
+        text-align: right;
+        margin-right: 10%;
+        cursor: pointer;
+    }
+    
+    .container_main .forget:hover {
+        color: #8ea9b8;
+    }
+    
+    .login {
+        width: 80%;
+        background: #B8E5E6;
+        border-radius: 26.2911px;
+        height: 40px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 15px;
+        font-weight: 500;
+        color: white;
+        font-weight: 400;
+        margin-top: 30px;
+        margin-bottom: 30px;
+      
+    }
+    .image-holder{
+        margin-top: 8px;
+    }
+
+}
+
+/* WIDH MOBILE */
+@media only screen and (max-width: 600px) and (min-height: 600px){
+
+    .container_main {
+        position: absolute;
+        width: 40vw;
+        height: auto;
+        left: 35vw;
+        top: 25%;
+        background: #FFFFFF;
+        border-radius: 17px;
+        text-align: center;
+    }
+    
+    .container_main .smart {
+        font-family: Nirmala UI;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 21px;
+        line-height: 40px;
+        /* identical to box height */
+        text-align: center;
+        color: #2C698D;
+    }
+    
+    .container_main .culture {
+        font-family: Nirmala UI;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 21px;
+     
+        /* identical to box height */
+        text-align: center;
+        color: #b6ccda;
+    }
+    
+    .container_main .acc input {
+        width: 80%;
+        border: none;
+        border-bottom: 1px solid #D3DFEF;
+        font-style: normal;
+        font-size: 10px;
+        line-height: 25px;
+        outline: none;
+        cursor: pointer;
+        padding-left: 2px;
+        font-family: Arial, Helvetica, sans-serif;
+        height: 29px;
+        padding-top: 4px;
+        background-color: white;
+       
+    }
+    .container_main .pas input{
+        width: 76%;
+        border: none;
+        border-bottom: 1px solid #D3DFEF;
+        font-style: normal;
+        font-size: 10px;
+        line-height: 25px;
+        outline: none;
+        cursor: pointer;
+        padding-left: 5px;
+        font-family: Arial, Helvetica, sans-serif;
+        height: 29px;
+        padding-top: 4px;
+        background-color: white;
+    }    
+
+    .fa-fw{
+        width: 0.5rem;
+        text-align: center;
+    }
+
+    .container_main .state_login {
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+        font-style: normal;
+        font-size: 13px;
+        line-height: 19px;
+        /* identical to box height, or 129% */
+        color: red;
+        /* width: 90%; */
+        float: left;
+        text-align: left;
+        margin-left: 10%;
+        padding-left: 10px;
+    }
+    
+    .container_main .forget {
+        font-family: Arial, Helvetica, sans-serif;
+        font-style: normal;
+        font-weight: bold;
+        font-size: 10px;
+        line-height: 19px;
+        /* identical to box height, or 129% */
+        color: #2C698D;
+        /* width: 90%; */
+        float: right;
+        text-align: right;
+        margin-right: 10%;
+        cursor: pointer;
+    }
+    
+    .container_main .forget:hover {
+        color: #8ea9b8;
+    }
+    
+    .login {
+        width: 80%;
+        background: #B8E5E6;
+        border-radius: 26.2911px;
+        height: 30px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 10px;
+        font-weight: 500;
+        color: white;
+        font-weight: 400;
+        margin-top: 30px;
+        margin-bottom: 30px;
+      
+    }
+    .image-holder{
+        margin-top: 8px;
+    }
+
+}
+

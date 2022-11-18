@@ -1,0 +1,61 @@
+<!-- HTML -->
+
+<div class="collapse-button">
+    <div class="collapse-button__wrapper">
+        <i class="fa-solid fa-angles-left"></i>
+    </div>
+</div>
+
+<!-- JS -->
+
+<script>
+    // sidebar expand collapse
+    let collapse = false
+    const switchButton = $('.collapse-button')[0]
+
+    switchButton.addEventListener('click', () => {
+        sidebar.classList.toggle('sidebar--collapse')
+        switchButton.classList.toggle('collapse-button--reverse')
+        // save sidebar state to local storage
+        localStorage.setItem('sidebarState',
+            sidebar.classList.contains('sidebar--collapse') ? 'collapse' : 'expand'
+        )
+    })
+
+</script>
+
+<!-- CSS -->
+
+<style>
+    .collapse-button {
+        position: absolute;
+        bottom: 20px;
+        right: 15px;
+        width: 40px;
+        aspect-ratio: 1/1;
+        font-size: 22px;
+        text-align: center;
+        border: 3px solid rgba(0, 0, 0, 0.4);
+        border-radius: 50%;
+        color: rgba(0, 0, 0, 0.4);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .collapse-button:hover {
+        background: rgb(246, 246, 246);
+    }
+
+    .collapse-button:active {
+        background: rgb(230, 230, 230);
+    }
+
+    .collapse-button__wrapper {
+        transform: rotate(0deg);
+        transition: all 0.4s ease;
+    }
+
+    .collapse-button--reverse .collapse-button__wrapper {
+        transform: rotate(180deg);
+    }
+</style>

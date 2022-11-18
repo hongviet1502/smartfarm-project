@@ -1,0 +1,116 @@
+<ul class="sidebar__submenu">
+    {% for gateway in gateways %}
+    {% if loop.index < 4 %}
+    <li class="sidebar__submenu__route sidebar__submenu__gateway__many-gateway" onclick="loadGatewayList('{{gateway._id}}')">
+        
+        <div class="sidebar__submenu__route__text" maxlength="5">{{gateway.name}}</div>
+        {% if gateway.active %}
+        <div class="sidebar__submenu__gateway__status sidebar__submenu__gateway__status--active"></div>
+        {% else %}
+        <div class="sidebar__submenu__gateway__status"></div>
+        {% endif %}
+    </li>
+    {% endif %}
+    {% endfor %}
+
+    {% if gateways|length > 3 %}
+    <li class="sidebar__submenu__gateway__view-more">
+        Xem thêm...
+    </li>
+    {% endif %}
+
+    <div class="sidebar__submenu__gateway__more-gateway">
+        {% for gateway in gateways %}
+        {% if loop.index >= 4 %}
+        <li class="sidebar__submenu__route" onclick="loadGatewayList('{{gateway._id}}')">
+            <div class="sidebar__submenu__route__text">{{gateway.name}}</div>
+            {% if gateway.active %}
+            <div class="sidebar__submenu__gateway__status sidebar__submenu__gateway__status--active"></div>
+            {% else %}
+            <div class="sidebar__submenu__gateway__status"></div>
+            {% endif %}
+        </li>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+</ul>
+
+
+
+<script>
+    if ($('.sidebar__submenu__gateway__view-more').length !== 0)
+        $('.sidebar__submenu__gateway__view-more')[0].addEventListener('click', () => {
+            $('.sidebar__submenu__gateway__view-more')[0].classList.add('sidebar__submenu__gateway__view-more--hidden')
+            $('.sidebar__submenu__gateway__more-gateway')[0].classList.add('sidebar__submenu__gateway__more-gateway--show')
+        });
+
+    function loadGatewayList(url){
+        // console.log(url);
+        window.location = "/home/" + url;
+    }
+
+</script>
+
+<style>
+    .sidebar__submenu {
+        max-height: 330px;
+        overflow-y: auto;
+    }
+
+    .sidebar__submenu__gateway__no-gateway {
+        font-weight: bold;
+        font-size: 18px;
+        color: rgba(0, 0, 0, 0.4);
+    }
+
+    .sidebar__submenu__gateway__few-gateway {
+        position: relative;
+    }
+
+    /* .sidebar__submenu__gateway__status {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 10px;
+        width: 12px;
+        height: 12px;
+        background-color: red;
+        border-radius: 50%;
+    } */
+
+    /* .sidebar__submenu__gateway__status--active {
+        background-color: rgba(20, 241, 82, 1);
+    } */
+
+    .sidebar__submenu__gateway__many-gateway {
+        position: relative;
+    }
+
+    .sidebar__submenu__gateway__view-more {
+        font-weight: bold;
+        font-size: 18px;
+        color: rgba(0, 0, 0, 0.4);
+        border-top: 1px solid rgba(209, 209, 209, 1);
+        padding: 7px 0;
+    }
+
+    .sidebar__submenu__gateway__view-more--hidden {
+        display: none;
+        text-align: center;
+    }
+
+    .sidebar__submenu__gateway__view-more:hover {
+        text-decoration: underline;
+    }
+
+    .sidebar__submenu__gateway__more-gateway {
+        display: none;
+        position: relative;
+    }
+
+    .sidebar__submenu__gateway__more-gateway--show {
+        display: block;
+    }
+</style>
+

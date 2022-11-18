@@ -1,0 +1,253 @@
+<div class="navbar">
+    {% with direction='left' %}
+    {% include 'components/navbar/navbar-arrow.html' %}
+    {% endwith %}
+    <div class="navbar__wrapper">
+        <div class="navbar__gateway-container">
+                <div class="navbar__gateway navbar__gateway--selected" id="navbar__gateway1"
+                    onclick="navbar_changeGatewayTo('ig-gateway')">
+                    <div class="navbar__gateway__text">
+                        Nha kinh
+                    </div>
+                    <div class="navbar__gateway__status"></div>
+                </div>
+        </div>
+    </div>
+
+    {% with direction='right' %}
+    {% include 'components/navbar/navbar-arrow.html' %}
+    {% endwith %}
+</div>
+
+<style>
+    .navbar {
+        --gap: 10px;
+        --arrow-width: 30px;
+        --height: 50px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        height: var(--height);
+        gap: var(--gap);
+        padding: 0 var(--gap);
+    }
+
+    .navbar__wrapper {
+        width: calc(100% - var(--gap) * 4 - var(--arrow-width) * 2);
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .navbar__gateway-container {
+        --number-of-gateway: 1;
+        --gateway-width: calc((100% - var(--gap) * (var(--number-of-gateway) - 1)) / var(--number-of-gateway));
+        --length-to-scroll: calc(0px - (100% - var(--gap) * (var(--number-of-gateway) - 1)) / var(--number-of-gateway) - var(--gap));
+        display: flex;
+        gap: var(--gap);
+        align-items: center;
+        height: 100%;
+        transition: transform 0.3s ease-in-out;
+        /* transform: translateX(calc(var(--length-to-scroll)*2)); */
+    }
+
+    .navbar__gateway {
+        position: relative;
+        flex-shrink: 0;
+        flex-basis: var(--gateway-width);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(100% - 10px);
+        background-color: rgba(184, 230, 230, 1);
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .navbar__gateway__text {
+        font-weight: 500;
+    }
+
+    /* .navbar__gateway__status {
+        position: absolute;
+        width: 10px;
+        top: 50%;
+        right: 10%;
+        transform: translateY(-50%);
+        aspect-ratio: 1/1;
+        background-color: red;
+        border-radius: 50%;
+    } */
+
+    .navbar__gateway--selected {
+        background: linear-gradient(90deg, #00F29B 0%, #0731C7 100%);
+    }
+
+    .navbar__gateway--selected .navbar__gateway__text {
+        color: white;
+    }
+
+    /* .navbar__gateway__status--active {
+        background-color: rgba(20, 241, 82, 1);
+    } */
+</style>
+
+<script>
+    function runNavbarScript() {
+        const gatewayContainer = document.getElementsByClassName('navbar__gateway-container')[0]
+        const arrowLeft = document.getElementById('navbar__arrow-left')
+        const arrowRight = document.getElementById('navbar__arrow-right')
+
+        var numberOfGatewayShow = calculateNumberOfGatewayShow()
+        var numberOfTotalGateway = parseInt('{{greenhouses|length}}') // replace by the actual length of gateway list
+
+        let currentGateway = parseInt(`
+            {% for greenhouse in greenhouses %}
+            {% if greenhouse._id == id_active %}
+                {{loop.index}}
+            {% endif %}
+            {% endfor %}
+        `) - 1
+        if (!currentGateway)
+            currentGateway = 0
+            
+        var currentGatewayInSlide = currentGateway
+
+
+        handleSlideMoving()
+
+        function handleSlideMoving() {
+            listenClickEvent()
+            listenResizeEvent()
+            initializeSlide()
+        }
+
+        function initializeSlide() {
+            currentGatewayInSlide = calculateCurrentGatewayInSlide()
+            fixArrowStateToCorrect()
+            scrollSlideToCurrent()
+        }
+
+        function listenClickEvent() {
+            arrowLeft.addEventListener('click', moveSlideToLeft)
+            arrowRight.addEventListener('click', moveSlideToRight)
+        }
+
+        function moveSlideToLeft() {
+            if (tooLittleGateway())
+                return
+            if (slideIsInBegin()) {
+            } else {
+                currentGatewayInSlide -= 1
+                scrollSlideToCurrent()
+            }
+            fixArrowStateToCorrect()
+        }
+
+        function moveSlideToRight() {
+            if (tooLittleGateway())
+                return
+            if (slideIsInEnd()) {
+            } else {
+                currentGatewayInSlide += 1
+                scrollSlideToCurrent()
+            }
+            fixArrowStateToCorrect()
+        }
+
+
+        function fixArrowStateToCorrect() {
+            if (tooLittleGateway()) {
+                disableArrowLeft()
+                disableArrowRight()
+            } else if (slideIsInBegin()) {
+                disableArrowLeft()
+                enableArrowRight()
+            } else if (slideIsInEnd()) {
+                disableArrowRight()
+                enableArrowLeft()
+            } else {
+                enableArrowLeft()
+                enableArrowRight()
+            }
+        }
+
+        function scrollSlideToCurrent() {
+            gatewayContainer.style.transform = `translate(calc(${lengthToScroll()} * ${currentGatewayInSlide}))`
+        }
+
+        function lengthToScroll() {
+            return getComputedStyle(gatewayContainer).getPropertyValue('--length-to-scroll')
+        }
+
+        function slideIsInBegin() {
+            return currentGatewayInSlide === 0
+        }
+
+        function slideIsInEnd() {
+            return currentGatewayInSlide + numberOfGatewayShow >= numberOfTotalGateway
+        }
+
+        function tooLittleGateway() {
+            return numberOfTotalGateway <= numberOfGatewayShow
+        }
+
+        function disableArrowLeft() {
+            arrowLeft.classList.add('navbar__arrow--disabled')
+        }
+
+        function disableArrowRight() {
+            arrowRight.classList.add('navbar__arrow--disabled')
+        }
+
+        function enableArrowLeft() {
+            arrowLeft.classList.remove('navbar__arrow--disabled')
+        }
+
+        function enableArrowRight() {
+            arrowRight.classList.remove('navbar__arrow--disabled')
+        }
+
+        function listenResizeEvent() {
+            updateNumberOfGatewayShow()
+            window.addEventListener('resize', () => {
+                if (calculateNumberOfGatewayShow() != numberOfGatewayShow) {
+                    numberOfGatewayShow = calculateNumberOfGatewayShow()
+                    updateNumberOfGatewayShow()
+                    initializeSlide()
+                }
+            })
+        }
+
+        function calculateNumberOfGatewayShow() {
+            return Math.floor((window.innerWidth - 300) / 400) + 1
+        }
+
+        function updateNumberOfGatewayShow() {
+            gatewayContainer.style.setProperty('--number-of-gateway', numberOfGatewayShow)
+        }
+
+        function calculateCurrentGatewayInSlide() {
+            if (tooLittleGateway())
+                return 0
+            else if (currentGatewayInSlide < 0)
+                return 0
+            else if (currentGatewayInSlide > numberOfTotalGateway - numberOfGatewayShow)
+                return numberOfTotalGateway - numberOfGatewayShow
+            else
+                return currentGatewayInSlide
+        }
+
+    }
+
+    runNavbarScript()
+
+    function navbar_changeGatewayTo(id) {
+        // console.log(`change gateway to ${id} ...`)
+        // TODO: change gateway logic
+        $('#navbar__gateway1').val(id)
+        const path = location.pathname.split("/");
+        let url = '/' + path[1] + '/' + path[2] + '/' + id;
+        window.location = url;
+    }
+</script> 

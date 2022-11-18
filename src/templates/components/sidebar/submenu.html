@@ -1,0 +1,68 @@
+<ul class="sidebar__submenu">
+    {% for route in submenu %}
+    <li class="sidebar__submenu__route
+    {{ 'sidebar__submenu__route--active' if (route.route in url_for(request.endpoint, **request.view_args)) else '' }}"
+        onclick="window.location.href='{{route.route}}'">
+        <!-- <h5>{{route.route}}</h5> -->
+        <div class="sidebar__submenu__route__text">{{route.name}}
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+
+<script>
+
+</script>
+
+<style>
+    .sidebar__submenu {
+        display: none;
+        position: absolute;
+        width: 180px;
+        padding: 5px;
+        left: calc(100% + 5px);
+        top: -1px;
+        border: 1px solid rgba(209, 209, 209, 1);
+        border-radius: 5px;
+        background-color: white;
+    }
+
+    .sidebar__submenu--show {
+        display: block;
+    }
+
+    .sidebar__submenu__route {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        border-radius: 5px;
+    }
+
+    .sidebar__submenu__route:hover {
+        background: linear-gradient(90deg, #00F29B 0%, #0731C7 100%);
+    }
+
+    .sidebar__submenu__route:hover .sidebar__submenu__route__text {
+        color: white;
+    }
+
+    .sidebar__submenu__route--active {
+        background: linear-gradient(90deg, #00F29B 0%, #0731C7 100%);
+    }
+
+    .sidebar__submenu__route:focus .sidebar__submenu__route__text {
+        color: white;
+    }
+
+    .sidebar__submenu__route--active .sidebar__submenu__route__text {
+        color: white;
+    }
+
+    .sidebar__submenu__route__text {
+        font-weight: bold;
+        font-size: 18px;
+        color: rgba(0, 0, 0, 0.4);
+    }
+</style>

@@ -1,0 +1,64 @@
+<ul class="dropdown-menu header__user__dropdown">
+    <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-farmlist" id="changeFarm">
+        <div class="header__user__dropdown__icon">
+            <i class="fas fa-home"></i>
+        </div>
+        <div class="header__user__dropdown__text">
+            Thay đổi nhà kính
+        </div>
+    </li>
+    <li class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-personal">
+        <div class="header__user__dropdown__icon">
+            <i class="fa-solid fa-pen-to-square"></i>
+        </div>
+        <div class="header__user__dropdown__text">
+            Thông tin tài khoản
+        </div>
+    </li>
+    <a href="/auth/logout/">
+        <li class="dropdown-item" href="/auth/logout/">
+            <div class="header__user__dropdown__icon">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            </div>
+            <div class="header__user__dropdown__text">
+                <a href="/auth/logout/">Đăng xuất</a>
+            </div>
+        </li>
+    </a>
+</ul>
+
+{% include 'components/header/modal-personal.html' %}
+{% include 'components/header/change-greenhouse.html' %}
+</script>
+
+<style>
+.header__user__dropdown li {
+    position: relative;
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.header__user__dropdown .dropdown-item:hover {
+    background-color: rgba(227, 246, 245, 1);
+}
+
+.header__user__dropdown .dropdown-item:active {
+    background-color: rgb(185, 235, 232);
+}
+
+.header__user__dropdown__icon {
+    color: black;
+}
+
+.header__user__dropdown__text {
+    color: black;
+}
+
+.header__user__dropdown__text a {
+    text-decoration: none;
+    color: black;
+}
+</style>
+
+<script src="{{ url_for('static', filename='js/change_farm.js')}}"></script>

@@ -1,0 +1,98 @@
+<ul class="dropdown-menu header__notification__dropdown">
+    <h4>Thông báo</h4>
+    <div class="header__notification__content"></div>
+</ul>
+
+<script>
+
+</script>
+
+<style>
+    .header__notification__dropdown {
+        width: 360px;
+        max-height: 438px;
+        overflow-y: auto;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    ::-webkit-scrollbar {
+        width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #E7E7E7;
+    }
+
+    .header__notification__item {
+        white-space: unset;
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .header__notification__item:hover {
+        background-color: #E3F6F5;
+    }
+
+
+    .header__notification__dropdown .dropdown-item:hover {
+        background-color: rgba(227, 246, 245, 1);
+    }
+
+    .header__notification__dropdown .dropdown-item:active {
+        background-color: rgb(185, 235, 232);
+    }
+
+    .header__notification__dropdown h4 {
+        margin-left: 24px;
+        font-size: 24px;
+    }
+
+    .header__notification__dropdown__image {
+        /* width: 50px; */
+        aspect-ratio: 1/1;
+        margin-right: 8px;
+    }
+
+    .header__notification__dropdown__image img {
+        /* width: 100%; */
+        width: 60px;
+    }
+
+    .header__notification__dropdown__text {
+        margin-right: 20px;
+    }
+
+    .header__notification__dropdown__text__alert {
+        color: black;
+        font-weight: bold;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 2;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+    }
+
+    .header__notification__dropdown__text__time {
+        font-size: 14px;
+        color: rgba(44, 105, 141, 1);
+        font-style: italic;
+    }
+
+    .header__notification__dropdown__status {
+        font-size: 10px;
+        color: #2F80ED;
+    }
+
+    .header__notification__dropdown__status--disabled {
+        display: none;
+    }
+</style>
