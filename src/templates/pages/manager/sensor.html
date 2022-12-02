@@ -20,12 +20,15 @@
             <div class="sensor-card" id="sensor-id">
                 <div class="sensor-card-header row">
                     <div class="col-3 sensor-icon">
-
-                        <img class='icon' src="{{ url_for('static', filename='MU.png')}}" alt=" " srcset=" ">
-                    
+                        {% if sensor.type == 1%}
+                        <img class='icon' src="{{ url_for('static', filename='icons/soil.png')}}" alt=" " srcset=" ">
+                        {% endif %}
+                        {% if sensor.type == 2%}
+                        <img class='icon' src="{{ url_for('static', filename='icons/temp.png')}}" alt=" " srcset=" ">
+                        {% endif %}
                     </div>
                     <div class="col-7 name-sensor text-center">
-                        <p class="name w-100">{{sensor.name}}<i class="fa-solid fa-circle fa-xs sensor-status"></i>
+                        <p class="name w-100">{{sensor.name}}
                         </p>
                         {% if sensor.type == 1%}
                         <p class="value w-100">{{sensor.curValue}}%</p>

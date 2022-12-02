@@ -1,4 +1,4 @@
-<!-- <p id="id_gateway" style="display: none;">{{house_id}}</p> -->
+
 <div class="sensor__row row ">
     {% if sensors|length != 0 %}
     {% for sensor in sensors %}
@@ -7,26 +7,31 @@
             <div class="sensor__body m-2">
                 <!-- Image + Name + IconStatus + Value -->
                 <div class="sensor__main">
-                    {% if sensor.type_sensor == 1 %}
+                    {% if sensor.type == 1 %}
                     <img src="{{ url_for('static', filename='icons/soil.png')}}" alt=" " srcset=" ">
                     {% endif %}
 
-                    {% if sensor.type_sensor == 2 %}
+                    {% if sensor.type == 2 %}
                     <img src="{{ url_for('static', filename='icons/temp.png')}}" alt=" " srcset=" ">
                     {% endif %}
                     <!-- Name + Value -->
                     <div class="sensor__info">
                         <div class="">
                             <!-- Name -->
-                            <div class="sensor__name">ten cam bien</div>
+                            <div class="sensor__name">{{sensor.name}}</div>
                             <!-- Status -->
-                            <div class="sensor__status">
+                            <!-- <div class="sensor__status">
                                 <i class="fa-solid fa-circle"></i>
-                            </div>
+                            </div> -->
                         </div>
                         <!-- Value -->
                         <div class="sensor__value">
-                            gia tri cam bien
+                            {% if sensor.type == 1 %}
+                            {{sensor.curValue}} %
+                            {% endif %}
+                            {% if sensor.type == 2 %}
+                            {{sensor.curValue}} *C
+                            {% endif %}
                         </div>
                     </div>
 
@@ -39,7 +44,7 @@
                             <span class='battery mt-3 curBattery'>100%</span>
                         </div>
                         <div class="sensor__cycle">
-                            Cập nhật: timeupdate phút/1 lần
+                            Cập nhật: {{sensor.timeUpdate}} phút/1 lần
                         </div>
                     </div>
 
@@ -49,11 +54,11 @@
                         <input type="hidden" name="" id="timeUpdate">
                         <div class="sensor__time">
                             <span><i class="fa-solid fa-clock"></i></span>
-                            <div class="time_update">gio update</div>
+                            <div class="time_update">{{sensor.latestUpdate[1]}}</div>
                         </div>
                         <div class="sensor__calender">
                             <span><i class="fa-solid fa-calendar-days"></i></span>
-                            <div class="date_update">ngay update</div>
+                            <div class="date_update">{{sensor.latestUpdate[0]}}</div>
                         </div>
                         <a href="" data-toggle="modal" data-target="#modal_download" id="select_download"><i
                             class="fa-solid fa-download"></i></a>
@@ -208,7 +213,7 @@
         justify-content: center;
         font-size: 24px;
         font-weight: 500;
-        color: #00851E;
+        color: #14F152;
         font-style: italic;
     }
 
@@ -399,35 +404,6 @@
 
 <script>
     $(document).ready(function () {
-    //     //Update trạng thái online/offline cho cảm biến
-    //     function checkStatusSensor() {
-    //         $(".sensor__card").each(function () {
-    //             // timeUpdate là chu kì update dữ liệu (ví dụ: 5 phút/1 lần)
-    //             let cycleUpdate = $(this).find("#timeUpdate").val()
-    //             // lấy thời gian update gần nhất
-    //             let timeUpdate = $(this).find(".time_update").text().trim()
-    //             let dateUpdate = $(this).find(".date_update").text().trim()
-    //             let [a, b, c] = dateUpdate.split("/")
-    //             dateUpdate = b + "/" + a + "/" + c
-    //             let timetamp_current = (new Date()).getTime()
-    //             let timestamp_Update = (new Date(timeUpdate + " " + dateUpdate)).getTime()
-    //             // console.log(timetamp_current - timestamp_Update)
-    //             if (Math.abs(timetamp_current - timestamp_Update) > (3 * cycleUpdate * 60 * 1000)) {
-    //                 $(this).find(".sensor__status").css("color", "#FF0000")
-    //                 $(this).find(".sensor__value").css("color", "#FF0000")
-    //             } else {
-    //                 $(this).find(".sensor__status").css("color", "#14F152")
-    //                 $(this).find(".sensor__value").css("color", "#14F152")
-    //             }
-    //         })
-    //     }
-
-    //     checkStatusSensor()
-
-    //     setInterval(function () {
-    //         checkStatusSensor()
-    //     }, 60 * 1000)
-
         //Selected Sensor First Card
         $(".sensor__card").first().addClass("sensor__selected")
 

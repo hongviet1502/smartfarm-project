@@ -7,7 +7,10 @@ admin = Blueprint('admin', __name__)
 
 @admin.route("/home/")
 def get_home_page():
-    return render_template('pages/admin/home.html')
+    sensors = db.select_records("sensors", {})
+    for sensor in sensors:
+        sensor['latestUpdate'] = convert2label((sensor['latestUpdate'])).split(" ")
+    return render_template('pages/admin/home.html', sensors = sensors)
 
 @admin.route('/home/chart/<sensorName>', methods = ['GET', 'POST'])
 def get_chart_info(sensorName):
@@ -37,7 +40,7 @@ def get_chart_info(sensorName):
                 time = []
                 for j in range (0, len(list_sensor_infor[i])):
                     value.append(list_sensor_infor[i][j]["value"])
-                    time.append(covert2label(list_sensor_infor[i][j]["time"]))
+                    time.append(convert2label(list_sensor_infor[i][j]["time"]))
                 list_sensor_value.append(value)
                 list_sensor_time.append(time)
                     
@@ -49,7 +52,7 @@ def get_chart_info(sensorName):
         logger.error('Load home with error: {}'.format(e))
         return render_template("page404.html")
 
-def covert2label(date, full = True):
+def convert2label(date, full = True):
     y, m, d, h, minn, sec, msec, _, _ = date.timetuple()
 
     if full:

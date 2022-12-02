@@ -99,7 +99,7 @@ p.name {
 p.value {
     font-size: 24px;
     font-weight: 600;
-    color: #00851E;
+    color: #14F152;
     font-style: italic;
     margin-bottom: 0px;
 }
@@ -176,7 +176,7 @@ span.battery-value {
 }
 
 .sensor-card-body .battery {
-    color: green;
+    color: #14F152;
     font-weight: 600;
 }
 .sensor-card-body .timeupdate {
