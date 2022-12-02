@@ -1,0 +1,439 @@
+<!-- <p id="id_gateway" style="display: none;">{{house_id}}</p> -->
+<div class="sensor__row row ">
+    {% if sensors|length != 0 %}
+    {% for sensor in sensors %}
+    <div id="" class="col-12 col-sm-6  d-flex justify-content-center">
+        <div class="sensor__card" id="">
+            <div class="sensor__body m-2">
+                <!-- Image + Name + IconStatus + Value -->
+                <div class="sensor__main">
+                    {% if sensor.type_sensor == 1 %}
+                    <img src="{{ url_for('static', filename='icons/soil.png')}}" alt=" " srcset=" ">
+                    {% endif %}
+
+                    {% if sensor.type_sensor == 2 %}
+                    <img src="{{ url_for('static', filename='icons/temp.png')}}" alt=" " srcset=" ">
+                    {% endif %}
+                    <!-- Name + Value -->
+                    <div class="sensor__info">
+                        <div class="">
+                            <!-- Name -->
+                            <div class="sensor__name">ten cam bien</div>
+                            <!-- Status -->
+                            <div class="sensor__status">
+                                <i class="fa-solid fa-circle"></i>
+                            </div>
+                        </div>
+                        <!-- Value -->
+                        <div class="sensor__value">
+                            gia tri cam bien
+                        </div>
+                    </div>
+
+                </div>
+                <div class="sensor__footer">
+                    <!-- Cycle Update + Battery -->
+                    <div class="sensor-cycle-battery">
+                        <div class="sensor__battery">
+                            <i class="fa-solid fa-battery-three-quarters"></i>
+                            <span class='battery mt-3 curBattery'>100%</span>
+                        </div>
+                        <div class="sensor__cycle">
+                            Cập nhật: timeupdate phút/1 lần
+                        </div>
+                    </div>
+
+
+                    <!-- Time + Calender -->
+                    <div class="sensor__time__update">
+                        <input type="hidden" name="" id="timeUpdate">
+                        <div class="sensor__time">
+                            <span><i class="fa-solid fa-clock"></i></span>
+                            <div class="time_update">gio update</div>
+                        </div>
+                        <div class="sensor__calender">
+                            <span><i class="fa-solid fa-calendar-days"></i></span>
+                            <div class="date_update">ngay update</div>
+                        </div>
+                        <a href="" data-toggle="modal" data-target="#modal_download" id="select_download"><i
+                            class="fa-solid fa-download"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="sensor__none">
+        Không có cảm biến
+    </div>
+    {% endif %}
+
+</div>
+
+<!-- Modal download -->
+<div class="modal fade" id="modal_download" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tải xuống dữ liệu</h5>
+            </div>
+            <div class="modal-body">
+                <div class="input">
+                    <label for="choose-date">Chọn ngày tải xuống: </label>
+                    <input type="date" id="choose-date" name="trip-start">
+                </div>
+                <div class="input">
+                    <label for="options">Lựa chọn tải xuống: </label>
+                    <select name="" id="options">
+                        <option value="day">Ngày được chọn</option>
+                        <option value="week">7 ngày gần nhất</option>
+                        <option value="month">1 tháng gần nhất</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="btn btn-primary" id="confirm_download">Tải xuống</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/sensor-card.js')}}"></script>
+<style>
+        input#choose-date {
+        height: 2rem;
+    }
+
+    select#options {
+        height: 2rem;
+    }
+
+    .sensor--relay__wrapper {
+        padding-left: 15px;
+        padding-right: 15px;
+        /* padding-left: 49px;
+        padding-right: 49px; */
+    }
+
+    .sensor--relay__wrapper .row {
+        margin: 16px 4px 0 4px;
+    }
+
+    .input {
+        margin: 1rem;
+    }
+    
+    .sensor__wrapper {
+        overflow-y: auto;
+        background-color: #ffffff;
+        border-radius: 20px;
+        border: 1px solid #D9D9D9;
+        min-width: 342px;
+        height: 346px;
+        margin-top: 12px;
+    }
+
+    .sensor__row {
+        /* overflow-y: auto;
+        height: 334px; */
+        margin: 0 16px;
+    }
+
+    .sensor__card {
+        width: 100%;
+        height: 148px;
+        border: 1px solid #14F152;
+        border-radius: 10px;
+        margin-bottom: 16px;
+    }
+
+    .sensor__body {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .sensor__card:hover {
+        cursor: pointer;
+        background-color: rgba(160, 248, 184, 0.4);
+    }
+
+    .sensor__card.sensor__selected {
+        background-color: rgba(160, 248, 184, 0.4);
+    }
+
+    .sensor__card img {
+        /* width: 80px; */
+        width: 69px;
+    }
+
+    .sensor__main {
+        display: flex;
+        /* align-items: center; */
+        gap: 4px;
+        justify-content: space-around;
+    }
+
+    .sensor__info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .sensor__info .sensor__name {
+        font-size: 20px;
+        font-weight: 700;
+        font-family: roboto;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        /* min-width: 132px; */
+        width: 132px;
+        flex: 1;
+        text-align: center;
+    }
+
+    .sensor__info .sensor__status {
+        font-size: 14px;
+        padding: 0 8px;
+    }
+
+    .sensor__value {
+        /* flex: 1; */
+        display: flex;
+        align-items: center;
+        width: 100%;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: 500;
+        color: #00851E;
+        font-style: italic;
+    }
+
+    .sensor__info>div:first-child {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        /* justify-content: center; */
+        align-items: center;
+    }
+
+    /* Sensor Time Calender */
+    .sensor__footer {
+        display: flex;
+        align-items: center;
+        /* gap: 1rem; */
+        justify-content: space-around;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .sensor-cycle-battery {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .sensor__battery {
+        color: #14F152;
+    }
+
+    .sensor__time__update {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .sensor__time,
+    .sensor__calender {
+        display: flex;
+        /* align-items: center; */
+        align-items: flex-start;
+        justify-content: space-around;
+        gap: 8px;
+    }
+
+    .sensor__time div,
+    .sensor__calender div,
+    .sensor__battery,
+    .sensor__cycle {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .sensor__none {
+        font-size: 20px;
+        color: #d9d9d9;
+        /* margin-top: 40px; */
+        text-align: center;
+    }
+
+
+    /* CSS Scroll Bar */
+    ::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+        background: #888;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+
+    /* Responsive */
+    @media (min-width: 992px) and (max-width: 1300px) {
+        /* .sensor__wrapper {
+            max-height: 248px;
+        } */
+
+        /* .sensor__card {
+            height: 100px;
+        } */
+
+        .sensor__main {
+            justify-content: unset;
+        }
+
+        .sensor__body {
+            gap: 24px;
+        }
+
+        .sensor__info .sensor__name {
+            font-size: 12px;
+            min-width: 0;
+            width: auto;
+        }
+
+        .sensor__info .sensor__status {
+            font-size: 8px;
+        }
+
+        .sensor__value {
+            font-size: 24px;
+        }
+
+        .sensor__card img {
+            width: 48px;
+            height: 48px;
+        }
+
+        .sensor__time>div,
+        .sensor__calender>div {
+            font-size: 12px;
+        }
+
+        .sensor__time div,
+        .sensor__calender div,
+        .sensor__battery,
+        .sensor__cycle {
+            font-size: 12px;
+        }
+
+        .sensor__time i,
+        .sensor__calender i {
+            font-size: 12px;
+        }
+
+        .sensor__time,
+        .sensor__calender {
+            align-items: center;
+        }
+
+        .sensor__footer {
+            gap: 0;
+            justify-content: space-around;
+        }
+    }
+
+    @media (min-width: 576px) and (max-width: 700px) {
+
+        .sensor__wrapper {
+            max-height: 292px;
+        }
+
+        .sensor__card {
+            height: 123px;
+        }
+
+        .sensor__card img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .sensor__info .sensor__name {
+            font-size: 14px;
+        }
+
+        .sensor__value {
+            font-size: 20px;
+        }
+
+        .sensor__time div,
+        .sensor__calender div {
+            font-size: 12px;
+        }
+
+        .sensor__time i,
+        .sensor__calender i {
+            font-size: 14px;
+        }
+
+        .sensor__time,
+        .sensor__calender {
+            align-items: center;
+        }
+
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+    //     //Update trạng thái online/offline cho cảm biến
+    //     function checkStatusSensor() {
+    //         $(".sensor__card").each(function () {
+    //             // timeUpdate là chu kì update dữ liệu (ví dụ: 5 phút/1 lần)
+    //             let cycleUpdate = $(this).find("#timeUpdate").val()
+    //             // lấy thời gian update gần nhất
+    //             let timeUpdate = $(this).find(".time_update").text().trim()
+    //             let dateUpdate = $(this).find(".date_update").text().trim()
+    //             let [a, b, c] = dateUpdate.split("/")
+    //             dateUpdate = b + "/" + a + "/" + c
+    //             let timetamp_current = (new Date()).getTime()
+    //             let timestamp_Update = (new Date(timeUpdate + " " + dateUpdate)).getTime()
+    //             // console.log(timetamp_current - timestamp_Update)
+    //             if (Math.abs(timetamp_current - timestamp_Update) > (3 * cycleUpdate * 60 * 1000)) {
+    //                 $(this).find(".sensor__status").css("color", "#FF0000")
+    //                 $(this).find(".sensor__value").css("color", "#FF0000")
+    //             } else {
+    //                 $(this).find(".sensor__status").css("color", "#14F152")
+    //                 $(this).find(".sensor__value").css("color", "#14F152")
+    //             }
+    //         })
+    //     }
+
+    //     checkStatusSensor()
+
+    //     setInterval(function () {
+    //         checkStatusSensor()
+    //     }, 60 * 1000)
+
+        //Selected Sensor First Card
+        $(".sensor__card").first().addClass("sensor__selected")
+
+        $(".sensor__card").click(function () {
+            $(".sensor__selected").removeClass("sensor__selected")
+            $(this).addClass("sensor__selected")
+        })
+    })
+</script>

@@ -199,6 +199,7 @@ p.tudt {
     display: flex;
     gap: 75px;
     font-weight: 500;
+    /* margin-top: 1rem; */
 }
 
 .dropdown-menu {

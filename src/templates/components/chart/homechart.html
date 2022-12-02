@@ -1,0 +1,129 @@
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<div id="chart"></div>
+<!-- <p id="house_id" style="display: none;">{{house_id}}</p> -->
+<style>
+  #chart {
+    background-color: white;
+  }
+  .apexcharts-menu-item.exportCSV {
+    display: none;}
+</style>
+<script>
+  var path = location.pathname.split("/")
+  if(path[2] == ""){
+    // var house_id = $("#house_id").text()
+    path[2] = "sensorName"
+  }
+  var url = "/home/chart/" + path[2]
+
+  $.ajax({
+    url: url,
+    contentType: "application/json;charset=utf-8",
+    dataType: 'json',
+    type: "GET",
+    success: function (response) {
+        console.log(response);
+      $('#chart').empty();
+      listdata = []
+      var data_len = 0;
+      for (let i = 0; i < response['sensor_count']; i++) {
+        data = []
+        for (let j = 0; j < response['value'][i].length; j++) {
+          data.push({ x: response['time'][i][j], y: response['value'][i][j] })
+        }
+        listdata.push(data)
+        data_len+= listdata[i].length;
+      }
+
+      listseries = []
+      for (let i = 0; i < response['sensor_count']; i++) {
+        listseries[i] = {
+          name: response['sensor_name'][i],
+          data: listdata[i]
+        }
+
+      }
+      if(data_len == 0){
+        listseries = [{
+          name: 'No data',
+          data: [{ x: new Date().getTime(), y: 0 }]
+        }]
+      }
+
+      var options = {
+        noData: {
+          text: "Không có dữ liệu",
+          align: 'center',
+          verticalAlign: 'middle',
+          style: {
+            color: '#d9d9d9',
+            fontSize: '30px',
+          }
+        },
+        series: listseries,
+        // series: [{
+        //   name: "test",
+        //   data:listdata[1]
+        // }],
+        chart: {
+          toolbar: {
+            show: true,
+            offsetX: 0,
+            offsetY: 0,
+            tools: {
+              download: true,
+              selection: true,
+              zoom: true,
+              zoomin: true,
+              zoomout: true,
+              pan: true,
+              reset: true ,
+            },
+            export: {
+              csv: {
+                filename: "Dữ liệu cảm biến",
+                columnDelimiter: ',',
+                headerCategory: 'category',
+                headerValue: 'value',
+                series: [{
+                name: "test",
+              }],
+              },
+              svg: {
+                filename: "Dữ liệu cảm biến",
+              },
+              png: {
+                filename: "Dữ liệu cảm biến",
+              }
+            },
+            autoSelected: 'zoom'
+          },
+          height: 480,
+          type: 'area',
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth'
+        },
+        xaxis: {
+          type: 'datetime',
+        },
+        tooltip: {
+          x: {
+            format: 'dd/MM/yy HH:mm',
+          },
+        },
+      };
+      
+      var chart = new ApexCharts(document.querySelector("#chart"), options);
+      chart.render();
+      
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  })
+</script>
+<!-- <script type="module" src="{{ url_for('static', filename='js/home.js')}}"></script> -->

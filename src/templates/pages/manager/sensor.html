@@ -15,7 +15,7 @@
 <div class="view_item">
     <div class="row">
         <!-- loop here -->
-
+        {% for sensor in list_sensor %}
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
             <div class="sensor-card" id="sensor-id">
                 <div class="sensor-card-header row">
@@ -25,9 +25,14 @@
                     
                     </div>
                     <div class="col-7 name-sensor text-center">
-                        <p class="name w-100"> ten cam bien<i class="fa-solid fa-circle fa-xs sensor-status"></i>
+                        <p class="name w-100">{{sensor.name}}<i class="fa-solid fa-circle fa-xs sensor-status"></i>
                         </p>
-                        <p class="value w-100">gia tri cam bien</p>
+                        {% if sensor.type == 1%}
+                        <p class="value w-100">{{sensor.curValue}}%</p>
+                        {% endif %}
+                        {% if sensor.type == 2%}
+                        <p class="value w-100">{{sensor.curValue}}*C</p>
+                        {% endif %}
                     </div>
                     <div class="col-2 dropdown">
                         <a href="" id="dropdownMenubutton" data-toggle="dropdown" aria-haspopup="true"
@@ -39,32 +44,32 @@
                             <a class="dropdown-item" href="#" id='delete_sensor' data-toggle="modal"
                                 data-target="#deleteSensor" onclick="handleDelete('id');"><i
                                     class="fa-solid fa-trash-can"></i> Xóa</a>
-
                         </div>
                     </div>
                 </div>
                 <div class="sensor-card-body row">
                     <div class="battery col-5">
                         <i class="fa-solid fa-battery-three-quarters"></i>
-                        <span class="battery-value">14%</span>
+                        <span class="battery-value">100%</span>
                     </div>
                     <div class="timeupdate col-7">
-                        <p class="tudt">Cập nhật: <span class="timeUpdate">10</span> phút/lần</p>
+                        <p class="tudt">Cập nhật: <span class="timeUpdate">{{sensor.timeUpdate}}</span> phút/lần</p>
                     </div>
+                    <p class="tudt">Cập nhật gần nhất: </p>
                     <div class="refresh_time">
                         <div class="time_update"><span style="padding-right: 3px;"><i
-                                    class="fa-solid fa-clock"></i></span>gio update</div>
+                                    class="fa-solid fa-clock"></i></span>{{sensor.latestUpdate[1]}}</div>
                         <div class="date_update"><span style="padding-right: 3px;"><i
-                                    class="fa-solid fa-calendar-days"></i></span>ngay up date
+                                    class="fa-solid fa-calendar-days"></i></span>{{sensor.latestUpdate[0]}}
                         </div>
                     </div>
-                    <div class="time">
+                    <!-- <div class="time">
                         Thời gian tạo: tgian tao
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
-
+        {% endfor %}
         <!-- end loop -->
         <div class="col-12 col-md-6 col-lg-4 col-xl-3">
             <div class="sensor-card sensor-card-add">

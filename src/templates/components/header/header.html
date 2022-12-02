@@ -29,77 +29,7 @@
 </div>
 
 <script>
-    let r = (Math.random() + 1).toString(36).substring(7);
-    const source = new EventSource(`/notify/${r}`);
-    source.onmessage = function (event) {
-        let res = JSON.parse(event.data);
-        let total_notify = res['house'] + res['createrelay']+ res["deleterelay"] + res["updaterelay"] + res['sensor'] +  res['update'];
-        if (total_notify != Number($('.header__notification__badge').text())) {
-            $('.header__notification__badge').css('display', "flex");
-            $('.header__notification__badge').text(total_notify);
-            // $('.notify-title').text("Thông báo (" + total_notify + ")");
-        }
-    }
-    $(".header__notification i").click(function () {
-        $(".header__notification__badge").css("display", "none")
-        $.ajax({
-            type: 'GET',
-            url: '/auth/notifications/',
-            contentType: "application/json;charset=utf-8",
-            dataType: 'json',
-            success: function (response) {
-                $(".header__notification__content").empty()
 
-                let temp = (window.location.href).split('/')
-                let link = temp[0] + '//' + temp[2] + '/static/icons/'
-                for (let index in response) {
-                    let notification = response[index];
-                    // console.log(notification)
-                    if (notification['type_notification'] == 0) {
-                        // new housse
-                        linkicons = link + 'home.svg';
-                    }
-                    else if (notification['type_notification'] == 1) {
-                        // new sensor
-                        linkicons = "https://img.icons8.com/fluency/48/000000/sensor.png"
-                    }
-                    else if (notification['type_notification'] == 2) {
-                        // new relay
-                        linkicons = "https://img.icons8.com/office/40/000000/relay.png"
-                    }
-                    else if (notification['type_notification'] == 3) {
-                        //
-                        linkicons = "https://img.icons8.com/fluency/48/000000/approve-and-update.png"
-                    }
-                    else {
-                        // udpate
-                        linkicons = "https://img.icons8.com/fluency/48/000000/change.png"
-                    }
-                    let notify_item = `
-                    <a href ="" class="header__notification__link">
-                        <li class="dropdown-item header__notification__item">
-                            <div class="header__notification__dropdown__image">
-                                <img src=${linkicons} alt="logo">
-                            </div>
-                            <div class="header__notification__dropdown__text">
-                                <div class="header__notification__dropdown__text__alert">
-                                    ${notification.message}
-                                </div>
-                                <div class="header__notification__dropdown__text__time">
-                                    ${notification.time_notification}
-                                </div>
-                            </div>
-                            <div class="header__notification__dropdown__status"><i class="fa-solid fa-circle"></i></div>
-                        </li>
-                    </a>
-                    `
-
-                    $(".header__notification__content").append(notify_item)
-
-                }
-            }
-        });
-    })
 </script>
 
 <style>
