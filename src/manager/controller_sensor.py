@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, render_template
-from src import db, logger
+from src import db, logger, mqtt, client
 from src.utils.get_data import *
-import datetime
+import datetime,json
 
 sensor = Blueprint('sensor', __name__)
 
@@ -12,16 +12,30 @@ def load_init_sensor():
             list_sensor = getSensors()
             for sensor in list_sensor:
                 sensor['latestUpdate'] = convert2label((sensor['latestUpdate'])).split(" ")
-            logger.info(list_sensor)
+            # logger.info(list_sensor)
             return render_template("pages/manager/sensor.html", list_sensor=list_sensor)
         except Exception as e:
             logger.error(e)
             return render_template("page404.html")
     elif request.method == 'POST':
-        data = request.get_json()
-        print(data)
-        return jsonify({'msg': 'ok'})
-
+        try:
+            data = request.get_json()
+            # print(data)
+            data = json.dumps(data)
+            dataSendStatus = mqtt.publish(client,"esp8266/controldevice",data)
+            if(dataSendStatus == 0):
+                return jsonify({
+                    "msg":"dieu khien thanh cong",
+                    "status": True
+                    })
+            else:
+                return jsonify({
+                    "msg":"dieu khien that bai",
+                    "status": False
+                    })
+        except Exception as e:
+            logger.error(e)
+            return render_template("page404.html")
 
 @sensor.route('/temphumisensorvalue', methods=['GET', 'POST', 'UPDATE', 'DELETE', 'PUT', 'DETAIL'])
 def save_sensor_data():

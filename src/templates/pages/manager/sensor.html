@@ -12,6 +12,11 @@
 {% endblock %}
 
 {% block contents %}
+<div class="relay__item__switch-button form-check form-switch form-switch-lg">
+    <p>OFF</p>
+    <input class="form-check-input relay__item__switch-button__input" type="checkbox" role="switch">
+    <p>ON</p>
+</div>
 <div class="view_item">
     <div class="row">
         <!-- loop here -->
@@ -42,8 +47,7 @@
                             aria-expanded="false"><i class="fa-solid fa-ellipsis-vertical"></i></a>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" href="#" onclick="handleEdit('trang thai','ten cam bien','id', 'max', 
-                            'min', 'calib1', 'calib2', 'calib3', 'timupdate');"><i
-                                    class="fa-solid fa-pen"></i> Sửa</a>
+                            'min', 'calib1', 'calib2', 'calib3', 'timupdate');"><i class="fa-solid fa-pen"></i> Sửa</a>
                             <a class="dropdown-item" href="#" id='delete_sensor' data-toggle="modal"
                                 data-target="#deleteSensor" onclick="handleDelete('id');"><i
                                     class="fa-solid fa-trash-can"></i> Xóa</a>
@@ -190,6 +194,7 @@
 </div>
 
 <script>
+    // 
 </script>
 {% endblock %}
 

@@ -177,3 +177,39 @@ $('#update-change2').click(function() {
         $('#modalEditRelay').modal("show");
     }
 });
+
+function changeRelayStatusApi() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "POST",
+            url: "/manager/sensor",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({
+                pinMode: 1
+            }),
+            dataType: 'json',
+            success: function (response) {
+                resolve(response)
+            },
+            error: function (error) {
+                reject(error)
+            }
+        })
+    })
+}
+const switchRelayStatusButton = document.getElementsByClassName('relay__item__switch-button__input')
+switchRelayStatusButton[0].addEventListener('change', async e => {
+    try {
+        e.target.disabled = true
+        const response = await changeRelayStatusApi()
+        if (response['status'] !== true)
+            throw new Error(response.message)
+        showAlert('Thay đổi trạng thái thiết bị that bai', 'Thay đổi trạng thái', 'danger')
+        e.target.disabled = false
+        showAlert('Thay đổi trạng thái thiết bị thành công', 'Thay đổi trạng thái', 'success')
+    } catch (error) {
+        e.target.disabled = false
+        e.target.checked = !e.target.checked
+        showAlert(error.message, 'Thay đổi trạng thái thất bại', 'Thay đổi trạng thái', 'danger')
+    }
+})
