@@ -4,54 +4,37 @@ var process_load;
 $('.close').click(function(){
     clearInterval(process_load);
 })
-$(".btn_add_sensor").click(function() {
-    const numb = document.querySelector("#number");
-    let counter = 59;
-    let res = null;
-    numb.textContent = 59 + "s còn lại";
-    $(".modal-footer").css("display", "none");
-    $(".modal-body-text").css("display", "flex");
-    $(".modal-body-text").text("Hệ thống đang dò tìm thiết bị. Vui lòng chờ trong giây lát.");
-    $(".loader").css({
-                    "border": "7px solid #E5E5E5", 
-                    "border-top": "10px solid #2C698D",
-                    "border-bottom": "10px solid #2C698D",
-                    "animation": "spin 2s linear infinite"});
+// $(".btn_add_sensor").click(function() {
+//     const numb = document.querySelector("#number");
+//     let counter = 59;
+//     let res = null;
+//     numb.textContent = 59 + "s còn lại";
+//     $(".modal-footer").css("display", "none");
+//     $(".modal-body-text").css("display", "flex");
+//     $(".modal-body-text").text("Hệ thống đang dò tìm thiết bị. Vui lòng chờ trong giây lát.");
+//     $(".loader").css({
+//                     "border": "7px solid #E5E5E5", 
+//                     "border-top": "10px solid #2C698D",
+//                     "border-bottom": "10px solid #2C698D",
+//                     "animation": "spin 2s linear infinite"});
     
-    var id_greenhouse = $('#id_greenhouse').text();
+//     var id_greenhouse = $('#id_greenhouse').text();
 
-    process_load = setInterval(function(){ 
-        if(counter == 0 ){
-            clearInterval(process_load);
-            $(".modal-footer").css("display", "flex");
-            $(".modal-body-text").css("display", "none");
-            $(".loader").css({"border": "7px solid #E5E5E5", "animation": "none"});
-            numb.textContent = "Không tìm thấy thiết bị mới"
-        }
-        else{
-            counter-= 1;
-            numb.textContent = counter + "s còn lại";
-        }
+//     process_load = setInterval(function(){ 
+//         if(counter == 0 ){
+//             clearInterval(process_load);
+//             $(".modal-footer").css("display", "flex");
+//             $(".modal-body-text").css("display", "none");
+//             $(".loader").css({"border": "7px solid #E5E5E5", "animation": "none"});
+//             numb.textContent = "Không tìm thấy thiết bị mới"
+//         }
+//         else{
+//             counter-= 1;
+//             numb.textContent = counter + "s còn lại";
+//         }
 
-    }, 1000);
-    
-    // $.ajax({
-    //     url: "/manager/sensor",
-    //     type: "PUT",
-    //     contentType: "application/json;charset=utf-8",
-    //     data: JSON.stringify(id_greenhouse),
-    //     dataType: 'json',
-    //     success: function(response) {
-    //         if (response['status'] == false) {
-    //             $(".modal-footer").css("display", "flex");
-    //             $(".modal-body-text").css("display", "none");
-    //             $(".loader").css({"border": "7px solid #E5E5E5", "animation": "none"});
-    //             numb.textContent = response['msg']
-    //             clearInterval(process_load);
-    //         }
-    //     }
-    // });
-});
+//     }, 1000);
+// });
 
 $('#edit_relay').click(function(){
     if($('#name_relay').val() == $('#name_relay').attr("placeholder")){
@@ -178,38 +161,3 @@ $('#update-change2').click(function() {
     }
 });
 
-function changeRelayStatusApi() {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            type: "POST",
-            url: "/manager/sensor",
-            contentType: "application/json;charset=utf-8",
-            data: JSON.stringify({
-                pinMode: 1
-            }),
-            dataType: 'json',
-            success: function (response) {
-                resolve(response)
-            },
-            error: function (error) {
-                reject(error)
-            }
-        })
-    })
-}
-const switchRelayStatusButton = document.getElementsByClassName('relay__item__switch-button__input')
-switchRelayStatusButton[0].addEventListener('change', async e => {
-    try {
-        e.target.disabled = true
-        const response = await changeRelayStatusApi()
-        if (response['status'] !== true)
-            throw new Error(response.message)
-        showAlert('Thay đổi trạng thái thiết bị that bai', 'Thay đổi trạng thái', 'danger')
-        e.target.disabled = false
-        showAlert('Thay đổi trạng thái thiết bị thành công', 'Thay đổi trạng thái', 'success')
-    } catch (error) {
-        e.target.disabled = false
-        e.target.checked = !e.target.checked
-        showAlert(error.message, 'Thay đổi trạng thái thất bại', 'Thay đổi trạng thái', 'danger')
-    }
-})

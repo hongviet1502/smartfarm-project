@@ -7,3 +7,10 @@ def getSensors():
     """
     list_sensor = db.select_records("sensors",{})
     return list_sensor
+
+def getRelays():
+    """
+    Return relays in dtb
+    """
+    list_relay = db.select_records("relays",{})
+    return list_relay

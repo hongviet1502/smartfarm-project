@@ -1,0 +1,199 @@
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    display: none;
+    float: left;
+    min-width: 3rem;
+    padding: 5px 0;
+    margin: 0.125rem 0 0;
+    font-size: 1rem;
+    color: #212529;
+    text-align: left;
+    list-style: none;
+    background-color: #ededed;
+    background-clip: padding-box;
+    border: 1px solid rgb(181 181 181);
+    border-radius: 9px;
+}
+
+ul.dropdown-menu.show {
+    border: 1px solid rgb(181 181 181);
+}
+
+.relay__item {
+    position: relative;
+    flex: 1 0 1%;
+    margin: 1rem var(--gap) var(--gap) 0;
+    min-width: var(--relay-width);
+    height: 200px;
+    padding: 10px;
+    border: 1.5px solid #14F152;
+    border-radius: 10px;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.relay__item__name {
+    display: flex;
+    align-items: center;
+}
+
+.relay__item__image-and-switch-container {
+    display: flex;
+}
+
+.relay__item__image img {
+    height: 60px;
+}
+
+.relay__item__switch-button {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 0;
+}
+
+.relay__item__switch-button.form-switch.form-switch-lg input:disabled {
+    cursor: wait;
+    pointer-events: all;
+}
+
+.relay__item__switch-button.form-switch.form-switch-lg input {
+    margin-left: 10px !important;
+    margin-right: 10px;
+    height: 2rem;
+    width: calc(3rem + 0.75rem);
+    border-radius: 4rem;
+}
+
+.relay__item__switch-button p {
+    margin: 0;
+    font-weight: 600;
+}
+
+.relay__item__type {
+    display: flex;
+    align-items: center;
+}
+
+.relay__item__time {
+    display: flex;
+    align-items: center;
+}
+
+.relay__item__time__inner,
+.relay__item__name__inner,
+.relay__item__type__inner {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Roboto';
+}
+
+.relay__item__type__inner span,
+.relay__item__time span {
+    display: inline-block;
+    width: 50%;
+}
+
+.relay__item__dot {
+    position: absolute;
+    padding: 5px;
+    top: 0;
+    right: 5px;
+    color: #259FCC;
+    cursor: pointer;
+}
+
+.relay__item__dot .dropdown-menu {
+    min-width: 0;
+    border: none;
+    background-color: #E6E6E6;
+}
+
+.relay__item__dot .dropdown-item:hover {
+    background-color: #E6E6E6;
+    filter: brightness(90%);
+}
+
+.relay__item__dot .dropdown-item:active {
+    background-color: #E6E6E6;
+    filter: brightness(80%);
+    color: unset;
+}
+
+.relay__item__dot .dropdown-item span {
+    margin-left: 10px;
+}
+
+.relay {
+    border: 1px solid transparent;
+    width: calc(100% - 20px);
+    height: calc(100% - 10px);
+    background-color: white;
+    margin: auto;
+    border-radius: 5px;
+    overflow-y: overlay;
+}
+
+.relay__container {
+    --gap: 40px;
+    --relay-width: 250px;
+    display: flex;
+    flex-wrap: wrap;
+    margin: var(--gap) 0 0 var(--gap);
+}
+
+
+.relay__item__add__container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+}
+
+.relay__item__add__plus {
+    position: relative;
+    width: 3rem;
+    margin: auto;
+    aspect-ratio: 1/1;
+    background-color: #259FCC;
+    border-radius: 50%;
+}
+
+.relay__item__add__plus::before {
+    content: "";
+    position: absolute;
+    top: 21px;
+    bottom: 21px;
+    left: 10px;
+    right: 10px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+.relay__item__add__plus::after {
+    content: "";
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 21px;
+    right: 21px;
+    background-color: white;
+    border-radius: 5px;
+}
+
+
+.relay__item__add__text {
+    color: #259FCC;
+    font-size: 20px;
+    padding-top: 10px;
+    font-weight: 600;
+}

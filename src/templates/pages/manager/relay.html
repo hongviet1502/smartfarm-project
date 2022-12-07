@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %} Quản lý thiết bị {% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/manager/relay.css')}}">
+{% endblock %}
+
+{% block navbar %}
+{% include 'components/navbar/navbar.html' %}
+{% endblock %}
+
+{% block contents %}
+<div class="relay">
+    <div class="relay__container">
+        {% for relay in list_relay %}
+        {% include 'components/relay/relay-card.html' %}
+        {% endfor %}
+    </div>
+</div>
+{% block script%}
+<script type="module" src="{{ url_for('static', filename='js/manager/relay/relay.js')}}"></script>
+<script>
+	function relayCardScript() {
+		changeRelayCardWidthBaseOnContainer()
+
+		function changeRelayCardWidthBaseOnContainer(params) {
+			const relayContainer = document.getElementsByClassName('relay__container')[0]
+			const relays = document.getElementsByClassName('relay__item')
+			const gap = parseInt(getComputedStyle(relayContainer).getPropertyValue('--gap').slice(0, -2))
+			const relayWidth = parseInt(getComputedStyle(relayContainer).getPropertyValue('--relay-width').slice(0, -2))
+			let numberOfRelayInARow = 0
+			new ResizeObserver(() => {
+				let newNumberOfRelayInARow = Math.floor(relayContainer.offsetWidth / (relayWidth + gap))
+				if (numberOfRelayInARow !== newNumberOfRelayInARow) {
+					numberOfRelayInARow = newNumberOfRelayInARow
+					for (let relay of relays) {
+						relay.style.maxWidth = `calc(100% / ${numberOfRelayInARow} - ${gap}px)`
+					}
+				}
+			}).observe(relayContainer)
+		}
+	}
+
+	relayCardScript()
+</script> 
+{% endblock %}
+{% endblock %}

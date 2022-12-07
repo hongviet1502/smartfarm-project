@@ -1,0 +1,309 @@
+<div class="relay__row row ">
+    {% if relays|length != 0 %}
+    {% for relay in relays %}
+    <div class="col-12 col-sm-6 d-flex justify-content-center relay__col">
+        <div class="relay__card">
+            <div class="relay__main m-2">
+                <div class="relay__name ml-3 mb-3">{{relay.name}}</div>
+                <div class="relay__body ml-3">
+                    <img src="{{url_for('static', filename='icons/relay.png')}}" alt="" class="relay__img">
+                    <div class="relay__control">
+                        <span class="relay__control--text">OFF</span>
+                        <label class="switch">
+                            <input class="relay__item__switch-button__input" type="checkbox" {% if relay.status==1 %}
+                                checked {% endif %} device="{{relay.type}}" name="{{relay.name}}">
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="relay__control--text">ON</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="relay__none">
+        Không có relay
+    </div>
+    {%endif%}
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="toast__home" class="toast" role="alert" aria-live="polite" aria-atomic="true" data-bs-delay="2000">
+        <div class="toast-header">
+            <i class="fa-solid toast-icon"></i>
+            <strong class="me-auto ms-1 toast-type"></strong>
+            <small class="toast-sub-message"></small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body"></div>
+    </div>
+</div>
+
+<style>
+    .relay__none {
+        font-size: 20px;
+        color: #d9d9d9;
+        text-align: center;
+    }
+
+    /* Input Range  */
+    .input__range--slider {
+        -webkit-appearance: none;
+        width: 100%;
+        height: 1px;
+        border-radius: 5px;
+        background: #7C858A;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+    }
+
+    .input__range--slider:hover {
+        opacity: 1;
+    }
+
+    .input__range--slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3E309A;
+        cursor: pointer;
+    }
+
+    .input__range--slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #3E309A;
+        cursor: pointer;
+    }
+
+    .relay__dim__cct {
+        margin-top: 60px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .relay__dim__container {
+        margin-top: 60px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    .relay__dim__cct label {
+        font-size: 16px;
+        font-weight: 500;
+        margin-right: 16px;
+        width: 32px;
+    }
+
+    .relay__dim__container label {
+        font-size: 16px;
+        font-weight: 500;
+        margin-right: 16px;
+        width: 32px;
+    }
+
+    .relay__dim,
+    .relay__cct {
+        display: flex;
+        align-items: center;
+    }
+
+
+    /* End Input Range */
+
+    /* Button Toggle Switch */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 56px;
+        height: 28px;
+    }
+
+    /* Ẩn nút checkbox đi */
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    /* Slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+    }
+
+    .slider::before {
+        position: absolute;
+        content: "";
+        height: 28px;
+        width: 28px;
+        left: 0;
+        bottom: 0;
+        background-color: #fff;
+        -webkit-transition: 0.4s;
+        transition: 0.4s;
+    }
+
+    input[type="checkbox"]:disabled+.slider {
+        cursor: wait;
+    }
+
+    input:checked+.slider {
+        background-color: #ACDFFF;
+    }
+
+    input:checked+.slider::before {
+        background-color: #259FCC;
+    }
+
+    input:focus+.slider {
+        box-shadow: 0 0 1px #ACDFFF;
+    }
+
+    input:checked+.slider:before {
+        -webkit-transform: translateX(28px);
+        -ms-transform: translateX(28px);
+        transform: translateX(28px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+
+
+
+    /*  */
+    /* .card__selected {
+        background-color: rgba(160, 248, 184, 0.4);
+    } */
+    .relay__wrapper {
+        overflow-y: auto;
+        background-color: #ffffff;
+        border-radius: 20px;
+        border: 1px solid #D9D9D9;
+        /* max-height: 334px; */
+        /* max-height: 318px; */
+        height: 346px;
+        margin-top: 12px;
+    }
+
+    .relay__row {
+        /* overflow-y: auto;
+        height: 334px; */
+        margin: 0 16px;
+        /* flex-direction: column;
+        flex-wrap: wrap; */
+    }
+
+    .relay__card {
+        width: 100%;
+        height: 148px;
+        border: 1px solid #14F152;
+        border-radius: 10px;
+        margin-bottom: 16px;
+        transition: all 0.2s ease;
+    }
+
+    .relay__body {
+        display: flex;
+        align-items: center;
+    }
+
+    .relay__name {
+        font-size: 20px;
+        font-weight: 600;
+        font-family: roboto;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        min-width: 132px;
+        text-align: left;
+    }
+
+    .relay__body img {
+        width: 60px;
+    }
+
+    .relay__control {
+        flex: 1;
+    }
+
+    .relay__control {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+    }
+
+    .relay__control--text {
+        color: #000;
+        font-family: roboto;
+        font-weight: 500;
+    }
+
+    /* Input Range Bubbles */
+    .relay__range--wrap {
+        flex: 1;
+        position: relative;
+    }
+
+    output {
+        color: #000;
+        position: absolute;
+        /* left: 50%; */
+        transform: translateX(-50%);
+        top: -16px;
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (min-width: 576px) and (max-width: 700px) {
+        .relay__body img {
+            width: 40px;
+        }
+    }
+
+    @media (min-width: 992px) and (max-width: 1300px) {
+        /* .relay__card {
+            height: 100px !important;
+        } */
+
+        /* .relay__body img {
+            width: 40px;
+        } */
+
+        .relay__name {
+            font-size: 16px;
+        }
+
+        .relay__control--text {
+            font-size: 12px;
+        }
+    }
+
+    .relay__card.relay__ble:hover {
+        cursor: pointer;
+    }
+</style>
+<script src="{{ url_for('static', filename='js/device-card.js')}}"></script>

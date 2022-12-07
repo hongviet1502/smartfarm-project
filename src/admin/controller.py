@@ -2,20 +2,22 @@ from flask import Blueprint,render_template,request,jsonify
 from datetime import date
 import datetime
 from src import logger,db
+from src.utils.get_data import *
 # from src import db
 admin = Blueprint('admin', __name__)
 
 @admin.route("/home/")
 def get_home_page():
-    sensors = db.select_records("sensors", {})
+    sensors = getSensors()
+    relays = getRelays()
     for sensor in sensors:
         sensor['latestUpdate'] = convert2label((sensor['latestUpdate'])).split(" ")
-    return render_template('pages/admin/home.html', sensors = sensors)
+    return render_template('pages/admin/home.html', sensors = sensors,relays = relays )
 
 @admin.route('/home/chart/<sensorName>', methods = ['GET', 'POST'])
 def get_chart_info(sensorName):
     '''
-    Load and return all sensor include in a greenhouse through by id of greenhouse and display chart
+    Load and return all sensor and display chart
     '''
     try:
         response = {}
@@ -25,8 +27,11 @@ def get_chart_info(sensorName):
         list_sensor_time = []
         list_sensor_name = []
         for i in range (0,len(list_sensor)):
+            # get all sensor data by sensorname and sort
             sensor_value = db.select_records("sensorvalues", {"sensorName": list_sensor[i]['name']},sort={"key": "timeUpdate", "direction" : -1})
+            # append value to list infor 
             list_sensor_infor.append(sensor_value)
+            # append name to list infor
             list_sensor_name.append(list_sensor[i]['name'])
         response['sensor_name'] = list_sensor_name
 
