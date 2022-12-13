@@ -1,0 +1,70 @@
+<div class="modal fade relay__delete" id="deleteRelay" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xóa thiết bị</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn chắc chắn muốn xóa thiết bị này! Dữ liệu không thể khôi phục được sau khi xóa.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="relay__delete__dismiss-button" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="relay__delete__delete-button">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function deleteRelayScript() {
+        const deleteRelay = document.getElementById('deleteRelay')
+
+        deleteRelay.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget
+            const id = button.getAttribute('_id')
+            deleteRelay.setAttribute('_id', id)
+        })
+    }
+
+    deleteRelayScript()
+</script>
+
+<style>
+    .relay__delete__delete-button {
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        background: #e92626;
+        color: white;
+    }
+    .relay__delete__dismiss-button {
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        /* background: #2C698D; */
+        color: black;
+    }
+    .relay__delete__dismiss-button:hover,
+    .relay__delete__delete-button:hover {
+        filter: brightness(90%);
+    }
+
+    .relay__delete__dismiss-button:active,
+    .relay__delete__delete-button:active {
+        filter: brightness(80%);
+    }
+
+    .relay__delete__delete-button:disabled {
+        filter: brightness(60%);
+        cursor: wait;
+    }
+
+    .relay__delete__delete-button:disabled:hover {
+        filter: brightness(60%);
+    }
+
+    .relay__delete__delete-button:disabled:active {
+        filter: brightness(60%);
+    }
+</style> 

@@ -1,0 +1,178 @@
+<div class="modal fade script__edit" id="editScript" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chỉnh sửa kịch bản</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-script-form" class="needs-validation" novalidate>
+                    <div class="container">
+                        <div class="row mb-3">
+                            <div class="col-4">
+                                <label for="script-name" class="form-label">Tên kịch bản:</label>
+                            </div>
+                            <div class="col-8">
+                                <input type="text" class="form-control" id="script__edit__script-name" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4">Thêm thiết bị</div>
+                            <div class="col-8">
+                                <select type="text" class="form-select" id="script__edit__add-relay" required>
+                                    <option value="all">Tất cả thiết bị</option>
+                                    <option value="1">Đèn</option>
+                                    <option value="0">Rơ le</option>
+                                    <option value="2">Relay Dimming</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {% include 'components/script/relay-slider-edit.html' %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="script__edit__dismiss-button" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="submit" class="script__edit__edit-button" form="edit-script-form">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+<p id="id-edit-script" style="display:none ;"></p>
+<script>
+    function editScriptScript() {
+        const editScript = document.getElementById('editScript')
+        const scriptName = document.getElementById('script__edit__script-name')
+        const addRelayType = document.getElementById('script__edit__add-relay')
+        const relaySlider = document.getElementsByClassName('script__relay-slider__edit__container')[0]
+        const relays = relaySlider.children
+        const scripts = document.getElementsByClassName('script__relay-slider__edit__item')
+
+        let numberOfRelay = {
+            'all': scripts.length,
+            '0': 0,
+            '1': 0,
+            '2': 0
+        }
+        relaySlider.setAttribute('number-of-total-relay', numberOfRelay['all'])
+
+        for (let script of scripts) {
+            numberOfRelay[script.getAttribute('type')]++
+        }
+
+        addRelayType.addEventListener('change', (e) => {
+            for (let script of scripts) {
+                if (e.target.value === 'all')
+                    script.style.display = 'block'
+                else if (script.getAttribute('type') === e.target.value)
+                    script.style.display = 'block'
+                else
+                    script.style.display = 'none'
+            }
+            // console.log(numberOfRelay[e.target.value])
+            relaySlider.setAttribute('number-of-total-relay', numberOfRelay[e.target.value])
+        })
+
+        editScript.addEventListener('show.bs.modal', (e) => {
+            const idEditScript = $('#id-edit-script').text();
+            console.log(idEditScript);
+            editScript.setAttribute('_id', idEditScript)
+            // scriptName.value = script.name
+            addRelayType.value = 'all'
+            addRelayType.dispatchEvent(new Event('change'))
+            for (relay of relays) {
+                console.log(1);
+                const relayAdd = relay.getElementsByClassName('script__relay-slider__edit__item__header__add')[0]
+                const relayActive = relay.getElementsByClassName('script__relay__switch')[0]
+                // const relayData = script.execute[relay.getAttribute('_id')]
+                if (relayData) {
+                    if (relayData.pull != 0 ){
+                        relayActive.checked = true
+                    }
+                    else if(relayData.pull != 0 && relayData.delay != 0 && relayData.during != 0){
+                        relayActive.checked = true
+                        relayOption.checked = true
+                        if (relayData.CCT) {
+                            if (relayData.DIM != 100 || relayData.CCT != 100) {
+                                relayConfig.checked = true
+                            }
+                        }
+                        else{
+                            if (relayData.DIM != 100) {
+                                relayConfig.checked = true
+                            }
+                        }
+                    }
+                    if (!isAdded(relay)) {
+                        relayAdd.dispatchEvent(new Event('click'))
+                    }
+                    relayTime.value = relayData.during
+                    relayDelay.value = relayData.delay
+                    if (relayDIM) relayDIM.value = relayData.DIM
+                    if (relayCCT) relayCCT.value = relayData.CCT
+                } else {
+                    if (isAdded(relay)) {
+                        relayAdd.dispatchEvent(new Event('click'))
+                    }
+                    relayTime.value = ''
+                    relayDelay.value = ''
+                    if (relayDIM) relayDIM.value = ''
+                    if (relayCCT) relayCCT.value = ''
+                }
+            }
+            function isAdded(relay) {
+                return relay.classList.contains('script__relay-slider__edit__item--added')
+            }
+
+            function addRelay(relay) {
+                relay.classList.add('script__relay-slider__edit__item--added')
+            }
+
+            function removeRelay(relay) {
+                relay.classList.remove('script__relay-slider__edit__item--added')
+            }
+        })
+    }
+
+    editScriptScript()
+</script>
+
+<style>
+    .script__edit__edit-button {
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        background: #2C698D;
+        background: #0066ff;
+        color: white;
+    }
+    .script__edit__dismiss-button{
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        /* background: #2C698D; */
+        color: black;
+    }
+    .script__edit__dismiss-button:hover,
+    .script__edit__edit-button:hover {
+        filter: brightness(90%);
+    }
+
+    .script__edit__dismiss-button:active,
+    .script__edit__edit-button:active {
+        filter: brightness(80%);
+    }
+
+    .script__edit__edit-button:disabled {
+        filter: brightness(60%);
+        cursor: wait;
+    }
+
+    .script__edit__edit-button:disabled:hover {
+        filter: brightness(60%);
+    }
+
+    .script__edit__edit-button:disabled:active {
+        filter: brightness(60%);
+    }
+</style>

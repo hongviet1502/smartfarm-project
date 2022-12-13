@@ -35,11 +35,11 @@
         <div class="script__item__dot" data-bs-toggle="dropdown">
             <i class="fa-solid fa-ellipsis-vertical"></i>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item script__item__edit" data-bs-toggle="modal" data-bs-target="#editScript" isActive="">
+                <li><a class="dropdown-item script__item__edit" data-bs-toggle="modal" data-bs-target="#editScript" _id = "{{script._id}}" onclick="setEditScriptId('{{script._id}}')">
                         <i class="fa-solid fa-pen"></i>
                         <span>Sửa</span>
                     </a></li>
-                <li><a class="dropdown-item script__item__delete" data-bs-toggle="modal" data-bs-target="#deleteScript" isActive="">
+                <li><a class="dropdown-item script__item__delete" data-bs-toggle="modal" data-bs-target="#deleteScript" onclick="setScriptId('{{script._id}}')">
                         <i class="fa-solid fa-trash-can"></i>
                         <span>Xóa</span>
                     </a></li>
@@ -49,7 +49,10 @@
 </div>
 
 <script>
-    function getScriptId(id){
-        $('#statusScriptId').val(id);
+    function setScriptId(id){
+        $('#id-delete-script').text(id);
+    }
+    function setEditScriptId(id){
+        $('#id-edit-script').text(id);
     }
 </script>

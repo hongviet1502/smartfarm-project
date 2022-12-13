@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request, render_template
 from src import db, logger, mqtt, client
 from src.utils.get_data import *
-import json
+import json, datetime
 scripts = Blueprint("scripts", __name__)
 
 @scripts.route("/script", methods=["GET", "DELETE","UPDATE"])
@@ -36,27 +36,26 @@ def load_home_scripts_page():
 
             dataControl = json.dumps(dataControl)
             isPublished = mqtt.publish(client,"esp8266/controlscripts",dataControl)
+            response['status'] =isPublished
             if(isPublished == 0):
-                response['code'] == 200
                 response['msg'] = "Thay đổi trạng thái kịch bản thành công"
             else:
-                response['code'] == 400
                 response['msg'] = "Thay đổi trạng thái kịch bản thất bại"
             return jsonify(response)
         except Exception as e:
             logger.error(e)
             return render_template("page404.html")
 
-    # elif request.method == "DELETE":
+    elif request.method == "DELETE":
 
-    #     try:
-    #         data = request.get_json()
-    #         status = Request_API.delete(2, data["id"])
-    #         if status['code'] == 200:
-    #             return jsonify({"status": True, "msg": "Xoá thành công kịch bản điều khiển!"})
-    #         return jsonify({"status": False, "msg": "Không thể xoá kịch bản. Vui lòng thử lại sau!"})
-    #     except Exception as e:
-    #         logger.error(e)
+        try:
+            data = request.get_json()
+            isDeleted = db.delete_record('scripts',{"_id": ObjectId(data['id'])})
+            if isDeleted:
+                return jsonify({"status": True, "msg": "Xoá thành công kịch bản điều khiển!"})
+            return jsonify({"status": False, "msg": "Không thể xoá kịch bản. Vui lòng thử lại sau!"})
+        except Exception as e:
+            logger.error(e)
 
 @scripts.route("/script/creation", methods=["GET", "UPDATE", "POST"])
 def create_script():

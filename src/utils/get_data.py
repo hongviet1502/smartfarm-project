@@ -35,3 +35,10 @@ def getScript(idScript):
     """
     script = db.select_records("scripts",{"_id": ObjectId(idScript)})[0]
     return script
+
+def getSchedules():
+    """
+    Return schedules in dtb
+    """
+    schedules = db.select_records("schedules",{})
+    return schedules   

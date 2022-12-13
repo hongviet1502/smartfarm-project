@@ -58,30 +58,28 @@ function createScriptApi(script) {
 //     })
 // }
 
-// function deleteScriptApt(script) {
-//     if (!(script instanceof Script))
-//         throw new Error('Data must be an instance of Script')
-//     return new Promise((resolve, reject) => {
-//         $.ajax({
-//             url: "/setting/script/" + script.getId(),
-//             type: "DELETE",
-//             contentType: "application/json;charset=utf-8",
-//             data: JSON.stringify({
-//                 id: script.getId()
-//             }),
-//             dataType: 'json',
-//             success: function (res) {
-//                 resolve(res)
-//             },
-//             error: function (err) {
-//                 reject(err)
-//             }
-//         })  
-//     })
-// }
+function deleteScriptApi(id) {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "/setting/script",
+            type: "DELETE",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({
+                id: id
+            }),
+            dataType: 'json',
+            success: function (res) {
+                resolve(res)
+            },
+            error: function (err) {
+                reject(err)
+            }
+        })  
+    })
+}
 
 export {
     createScriptApi,
     // updateScriptApi,
-    // deleteScriptApt
+    deleteScriptApi
 }

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block head %} 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/setting/schedule.css')}}"> 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/admin/style.css')}}">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+{% endblock %}
+
+{% block title %} Cài đặt {% endblock %}
+
+{% block navbar %}
+{% include 'components/navbar/navbar.html' %}
+{% endblock %}
+
+{% block contents %} 
+<div class="schedule">
+    {% include 'components/schedule/schedule-card.html' %}
+
+    {% include 'components/schedule/add-schedule.html' %}
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script type="module" src="{{ url_for('static', filename='js/setting/schedule_detail.js')}}"></script>
+{% endblock %}

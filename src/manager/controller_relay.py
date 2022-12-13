@@ -21,6 +21,7 @@ def handle_relay():
         try:
             data = request.get_json()
             data['type'] = int(data['type'])
+            data['mode'] = 1
             data = json.dumps(data)
             # public to topic control device
             dataSendStatus = mqtt.publish(client,"esp8266/controldevice",data)
@@ -45,3 +46,8 @@ def handle_relay():
                     })
         except Exception as e:
             logger.error(e)
+
+    elif request.method == 'DELETE':
+
+        id_delete = request.get_json()
+        print(id_delete)

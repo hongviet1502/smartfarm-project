@@ -56,3 +56,24 @@ for (let switchRelayStatusButton of switchRelayStatusButtons) {
         }
     })
 } 
+
+
+// delete relay
+const deleteRelayButton = document.getElementsByClassName('relay__delete__delete-button')[0]
+deleteRelayButton.addEventListener('click', async e => {
+    const deleteRelay = document.getElementById('deleteRelay')
+
+    e.preventDefault()
+    e.stopPropagation()
+
+    function disabledSubmitButton() {
+        deleteRelayButton.disabled = true
+    }
+
+    function enableSubmitButton() {
+        deleteRelayButton.disabled = false
+    }
+
+    const relayToDelete = new Relay(deleteRelay.getAttribute('_id'), '')
+    console.log(relayToDelete);
+})

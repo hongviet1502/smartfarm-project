@@ -18,6 +18,7 @@
         {% endfor %}
     </div>
 </div>
+{% include 'components/relay/delete-relay.html' %}
 {% block script%}
 <script type="module" src="{{ url_for('static', filename='js/manager/relay/relay.js')}}"></script>
 <script>

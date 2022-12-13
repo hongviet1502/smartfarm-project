@@ -1,0 +1,352 @@
+<div class="col-12 col-md-6 col-lg-4 col-xl-3">
+    <div class="schedule__container-add schedule__add">
+        <div class='schedule__item__add__container' data-bs-toggle="modal" data-bs-target="#addSchedule">
+            <div class="schedule__item__add__plus"></div>
+            <div class="schedule__item__add__text">Thêm lịch</div>
+        </div>
+    </div>
+</div>
+
+<div class="modal modal-xl fade schedule__add" id="addSchedule" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tạo lịch</h5>
+                <button type="button" class="btn-close" data-dismiss="modal" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="add-schedule-form" class="needs-validation" novalidate>
+                    <div class="container">
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="schedule-name" class="form-label" style="margin-top: 5%;">Tên lịch:</label>
+                            </div>
+                            <div class="col-9">
+                                <input type="text" class="form-control schedule__add__schedule-name" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="schedule-type" class="form-label">Thêm thiết bị:</label>
+                            </div>
+                            <div class="col-9">
+                                <select class="form-select" id="schedule__add__schedule-type" required>
+                                    <option value="0">Tất cả thiết bị</option>
+                                    <option value="1">Relay</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="schedule-name" class="form-label">Thời gian:</label>
+                            </div>
+                            <div class="col-9">
+                                <input type="datetime-local" class="form-control apptStart" name="appt" id="1" required>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="schedule__add-select-device">
+                                {% with direction='left' %}
+                                <div class="schedule__arrow" id="schedule__arrow-{{direction}}">
+                                    {% if direction=='left' %}
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                    {% else %}
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                    {% endif %}
+                                </div>
+                                {% endwith %}
+                                <div class="schedule__wrapper">
+                                    <div class="schedule__device-container" total="{{relays|length}}">
+                                        {% for relay in relays %}
+                                        <div class="schedule__device not-used-schedule pump" value="0">
+                                            <div class="schedule__device__item__text-and-image-container">
+                                                <div class="schedule__device__item__text__inner">
+                                                    <h5>{{relay.name}}</h5>
+                                                </div>
+                                                <div class="schedule__device__item__plus-circle not-used"
+                                                    _id="{{relay._id}}" value="0">
+                                                    <i class='fas fa-plus-circle'></i>
+                                                </div>
+                                            </div>
+                                            <div class="schedule__device__item__text-and-switch-container">
+                                                <div class="schedule__device__item__image">
+                                                    <img src="{{ url_for('static', filename='icons/relay.png') }}"
+                                                        alt="relay image" style="height: 65px;">
+                                                </div>
+                                                <div class="schedule__device__item__switch-container">
+                                                    <div
+                                                        class="schedule__relay-slider__item__switch form-check form-switch form-switch-lg">
+                                                        <input class="form-check-input schedule__relay__switch"
+                                                            type="checkbox" value="1" role="switch" disabled="true"
+                                                            checked>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% with direction='right' %}
+                                <div class="schedule__arrow" id="schedule__arrow-{{direction}}">
+                                    {% if direction=='left' %}
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                    {% else %}
+                                    <i class="fa-solid fa-chevron-right"></i>
+                                    {% endif %}
+                                </div>
+                                {% endwith %}
+                            </div>
+                        </div>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="schedule__add__dismiss-button" data-dismiss="modal"
+                    data-bs-dismiss="modal">Hủy bỏ</button>
+                <button class="schedule__add__add-button" id="create-schedule">Thêm mới</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function runRelaySliderScript() {
+        slideScript()
+
+        function slideScript() {
+            const relayContainer = document.getElementsByClassName('schedule__device-container')[0]
+            const arrowLeft = document.getElementById('schedule__arrow-left')
+            const arrowRight = document.getElementById('schedule__arrow-right')
+            var numberOfRelayShow = calculateNumberOfRelayShow()
+            let currentRelay = 0
+            var currentRelayInSlide = currentRelay
+
+            handleSlideMoving()
+
+            function handleSlideMoving() {
+                listenClickEvent()
+                listenResizeEvent()
+                initializeSlide()
+            }
+
+            function initializeSlide() {
+                currentRelayInSlide = calculateCurrentGatewayInSlide()
+                fixArrowStateToCorrect()
+                scrollSlideToCurrent()
+            }
+
+            function listenClickEvent() {
+                arrowLeft.addEventListener('click', moveSlideToLeft)
+                arrowRight.addEventListener('click', moveSlideToRight)
+            }
+
+            function moveSlideToLeft() {
+                if (tooLittleGateway())
+                    return
+                if (slideIsInBegin()) {
+                } else {
+                    currentRelayInSlide -= 1
+                    scrollSlideToCurrent()
+                }
+                fixArrowStateToCorrect()
+            }
+
+            function moveSlideToRight() {
+                if (tooLittleGateway())
+                    return
+                if (slideIsInEnd()) {
+                } else {
+                    currentRelayInSlide += 1
+                    scrollSlideToCurrent()
+                }
+                fixArrowStateToCorrect()
+            }
+
+
+            function fixArrowStateToCorrect() {
+                if (tooLittleGateway()) {
+                    disableArrowLeft()
+                    disableArrowRight()
+                } else if (slideIsInBegin()) {
+                    disableArrowLeft()
+                    enableArrowRight()
+                } else if (slideIsInEnd()) {
+                    disableArrowRight()
+                    enableArrowLeft()
+                } else {
+                    enableArrowLeft()
+                    enableArrowRight()
+                }
+            }
+
+            function scrollSlideToCurrent() {
+                relayContainer.style.transform = `translate(calc(${lengthToScroll()} * ${currentRelayInSlide}))`
+            }
+
+            function lengthToScroll() {
+                return getComputedStyle(relayContainer).getPropertyValue('--length-to-scroll')
+            }
+
+            function numberOfTotalRelay() {
+                return parseInt(relayContainer.getAttribute('total'));
+            }
+
+            function slideIsInBegin() {
+                return currentRelayInSlide === 0
+            }
+
+            function slideIsInEnd() {
+                return currentRelayInSlide + numberOfRelayShow >= numberOfTotalRelay()
+            }
+
+            function tooLittleGateway() {
+                return numberOfTotalRelay() <= numberOfRelayShow
+            }
+
+            function disableArrowLeft() {
+                arrowLeft.classList.add('schedule__arrow--disabled')
+            }
+
+            function disableArrowRight() {
+                arrowRight.classList.add('schedule__arrow--disabled')
+            }
+
+            function enableArrowLeft() {
+                arrowLeft.classList.remove('schedule__arrow--disabled')
+            }
+
+            function enableArrowRight() {
+                arrowRight.classList.remove('schedule__arrow--disabled')
+            }
+
+            function listenResizeEvent() {
+                updateNumberOfGatewayShow()
+
+                new ResizeObserver(() => {
+                    if (calculateNumberOfRelayShow() != numberOfRelayShow) {
+                        numberOfRelayShow = calculateNumberOfRelayShow()
+                        updateNumberOfGatewayShow()
+                        initializeSlide()
+                    }
+                }).observe(relayContainer)
+
+                window.addEventListener('resize', () => {
+
+                })
+            }
+
+            function calculateNumberOfRelayShow() {
+                return Math.floor((relayContainer.offsetWidth - 300) / 200) + 1
+            }
+
+            function updateNumberOfGatewayShow() {
+                relayContainer.style.setProperty('--number-of-relay', numberOfRelayShow)
+            }
+
+            function calculateCurrentGatewayInSlide() {
+                if (tooLittleGateway())
+                    return 0
+                else if (currentRelayInSlide < 0)
+                    return 0
+                else if (currentRelayInSlide > numberOfTotalRelay() - numberOfRelayShow)
+                    return numberOfTotalRelay() - numberOfRelayShow
+                else
+                    return currentRelayInSlide
+            }
+
+            $('.form-select').on('change', function () {
+                if (this.value == 0) {
+                    $('.pump').each(function (index, element) {
+                        relayContainer.setAttribute('total', '{{relays|length}}')
+                        $(this).css('display', 'block');
+                    });
+                    $('.light').each(function (index, element) {
+
+                        $(this).css('display', 'block');
+                    });
+                    $('.dim').each(function (index, element) {
+
+                        $(this).css('display', 'block');
+                    });
+                }
+                else if ((this.value == 1) && ($('.schedule__device-container').children().hasClass('light'))) {
+                    relayContainer.setAttribute('total', '{{relays|length - 2}}')
+                    // show bong den va hide máy bơm
+                    $('.pump').each(function (index, element) {
+
+                        $(this).css('display', 'block');
+                    });
+                    $('.light').each(function (index, element) {
+
+                        $(this).css('display', 'none');
+                    });
+                    $('.dim').each(function (index, element) {
+
+                        $(this).css('display', 'none');
+                    });
+                }
+                else if ((this.value == 1)) {
+                    relayContainer.setAttribute('total', '{{relays|length}}')
+                    // show bong den va hide máy bơm
+                    $('.pump').each(function (index, element) {
+
+                        $(this).css('display', 'block');
+                    });
+                    $('.light').each(function (index, element) {
+
+                        $(this).css('display', 'none');
+                    });
+                    $('.dim').each(function (index, element) {
+
+                        $(this).css('display', 'none');
+                    });
+                }
+                else if ((this.value == 3)) {
+                    relayContainer.setAttribute('total', '1')
+                    // show bong den va hide máy bơm
+                    $('.pump').each(function (index, element) {
+
+                        $(this).css('display', 'none');
+                    });
+                    $('.light').each(function (index, element) {
+
+                        $(this).css('display', 'none');
+                    });
+                    $('.dim').each(function (index, element) {
+
+                        $(this).css('display', 'block');
+                    });
+                }
+                else {
+                    // show máy bơm và hide ôn bóng đèn
+                    $('.pump').each(function (index, element) {
+                        relayContainer.setAttribute('total', '1')
+
+                        $(this).css('display', 'none');
+                    });
+                    $('.light').each(function (index, element) {
+
+                        $(this).css('display', 'block');
+                    });
+                    $('.dim').each(function (index, element) {
+
+                        $(this).css('display', 'none');
+                    });
+                }
+            });
+
+            (new MutationObserver(() => {
+                initializeSlide()
+            })).observe(relayContainer, {
+                attributes: true,
+                attributeFilter: ['total']
+            })
+        }
+    }
+
+    runRelaySliderScript()
+</script>
