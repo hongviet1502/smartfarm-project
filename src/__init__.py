@@ -26,10 +26,10 @@ from src.admin.controller import admin
 from src.manager.controller_firmware import firmware
 from src.manager.controller_sensor import sensor
 from src.manager.controller_relay import relay
-
+from src.setting.controller_script import scripts
 app.register_blueprint(auth, url_prefix='/auth')
 app.register_blueprint(admin, url_prefix='/')
 app.register_blueprint(firmware, url_prefix='/manager')
 app.register_blueprint(sensor, url_prefix='/manager')
 app.register_blueprint(relay, url_prefix='/manager')
-
+app.register_blueprint(scripts, url_prefix='/setting')

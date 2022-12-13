@@ -1,0 +1,112 @@
+<div class="modal fade script__add" id="addScript" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable  modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm kịch bản</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-script-form" class="needs-validation" novalidate>
+                    <div class="container">
+                        <div class="row mb-3">
+                            <div class="col-4">Tên kịch bản</div>
+                            <div class="col-8">
+                                <input type="text" class="form-control" id="script__add__script-name" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4">Thêm thiết bị</div>
+                            <div class="col-8">
+                                <select type="text" class="form-select" id="script__add__add-relay" required>
+                                    <option value="all">Tất cả thiết bị</option>
+                                    <option value="2">Relay Dimming</option>
+                                    <option value="1">Đèn</option>
+                                    <option value="0">Rơ le</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    {% include 'components/script/relay-slider-add.html' %}
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="script__add__dismiss-button" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="submit" class="script__add__add-button" form="add-script-form">Thêm kịch bản</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addScriptScript() {
+        const scripts = document.getElementsByClassName('script__relay-slider__add__item')
+        const addRelayType = document.getElementById('script__add__add-relay')
+        const relaySlider = document.getElementsByClassName('script__relay-slider__add__container')[0]
+        let numberOfRelay = {
+            'all': scripts.length,
+            '0': 0,
+            '1': 0,
+            '2': 0,
+        }
+        relaySlider.setAttribute('number-of-total-relay', numberOfRelay['all'])
+
+        for (let script of scripts) {
+            numberOfRelay[script.getAttribute('type')]++
+        }
+
+        addRelayType.addEventListener('change', (e) => {
+            for (let script of scripts) {
+                if (e.target.value === 'all')
+                    script.style.display = 'block'
+                else if (script.getAttribute('type') === e.target.value)
+                    script.style.display = 'block'
+                else
+                    script.style.display = 'none'
+            }
+            // console.log(numberOfRelay[e.target.value])
+            relaySlider.setAttribute('number-of-total-relay', numberOfRelay[e.target.value])
+        })
+
+    }
+
+    addScriptScript()
+</script>
+
+<style>
+    .script__add__add-button {
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        background: #0066ff;
+        color: white;
+    }
+    .script__add__dismiss-button {
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        /* background: #2C698D; */
+        color: black;
+    }
+    .script__add__dismiss-button:hover,
+    .script__add__add-button:hover {
+        filter: brightness(90%);
+    }
+
+    .script__add__dismiss-button:active,
+    .script__add__add-button:active {
+        filter: brightness(80%);
+    }
+
+    .script__add__add-button:disabled {
+        filter: brightness(60%);
+        cursor: wait;
+    }
+
+    .script__add__add-button:disabled:hover {
+        filter: brightness(60%);
+    }
+
+    .script__add__add-button:disabled:active {
+        filter: brightness(60%);
+    }
+</style>

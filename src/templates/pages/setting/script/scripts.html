@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %} Kịch bản {% endblock %}
+
+{% block navbar %}
+{% include 'components/navbar/navbar.html' %}
+{% endblock %}
+
+{% block contents %}
+<div class="script" greenhouse-id="{{id_active}}">
+    <div class="script__container">
+        {% for script in scripts %}
+        {% include 'components/script/script-card.html' %}
+        {% endfor %}
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3"> 
+            <div class="script__item script__add">
+                <div class="script__item__add__container" data-bs-toggle="modal" data-bs-target="#addScript">
+                    <div class="script__item__add__plus"></div>
+                    <div class="script__item__add__text">Thêm kịch bản</div>
+                </div>
+            </div>
+        </div>
+
+        {% include 'components/script/script-card-static.html' %}
+    </div>
+    {% include 'components/script/add-script.html' %}
+</div>
+{% endblock %}
+
+{% block head %}
+<style>
+    .script {
+        border: 1px solid transparent;
+        width: calc(100% - 20px);
+        height: calc(100% - 10px);
+        background-color: white;
+        margin: auto;
+        border-radius: 5px;
+        overflow-y: overlay;
+    }
+
+    .script__container {
+        --gap: 40px;
+        --script-width: 250px;
+        display: flex;
+        flex-wrap: wrap;
+        margin: var(--gap) 0 0 var(--gap);
+    }
+
+
+    .script__item__add__container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        cursor: pointer;
+    }
+
+    .script__item__add__plus {
+        position: relative;
+        width: 3rem;
+        margin: auto;
+        aspect-ratio: 1/1;
+        background-color: #259FCC;
+        border-radius: 50%;
+    }
+
+    .script__item__add__plus::before {
+        content: "";
+        position: absolute;
+        top: 21px;
+        bottom: 21px;
+        left: 10px;
+        right: 10px;
+        background-color: white;
+        border-radius: 5px;
+    }
+
+    .script__item__add__plus::after {
+        content: "";
+        position: absolute;
+        top: 10px;
+        bottom: 10px;
+        left: 21px;
+        right: 21px;
+        background-color: white;
+        border-radius: 5px;
+    }
+
+    .script__item__add__text {
+        color: #259FCC;
+        font-size: 20px;
+        padding-top: 10px;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+
+{% block script %}
+<script type="module" src="{{ url_for('static', filename='js/setting/scripts/action.js')}}"></script>
+{% endblock %}

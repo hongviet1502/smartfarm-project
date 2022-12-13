@@ -2,7 +2,7 @@ from paho.mqtt import client as mqtt_client
 import time, random
 from src import logger
 # public broker information
-broker = 'broker.emqx.io'
+broker = 'localhost'
 port = 1883
 topic = "esp8266/smartfarmviet"
 client_id = f'python-mqtt-{random.randint(0, 1000)}'
@@ -27,8 +27,6 @@ class MQTT_Connector:
         client.username_pw_set(username, password)
         client.connect(broker, port)
         client.on_connect = on_connect
-        msg = "msg from python"
-        result = client.publish(topic, msg) # test public 
         return client
 
     def subscribe(client: mqtt_client):

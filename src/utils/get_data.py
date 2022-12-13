@@ -14,3 +14,24 @@ def getRelays():
     """
     list_relay = db.select_records("relays",{})
     return list_relay
+
+def getRelay(idRelay):
+    """
+    Return relay with specific id
+    """
+    relay = db.select_records("relays",{"_id": ObjectId(idRelay)})[0]
+    return relay
+
+def getScripts():
+    """
+    Return all scripts in dtb
+    """
+    scripts = db.select_records("scripts",{})
+    return scripts
+
+def getScript(idScript):
+    """
+    Return scripts with specific id
+    """
+    script = db.select_records("scripts",{"_id": ObjectId(idScript)})[0]
+    return script

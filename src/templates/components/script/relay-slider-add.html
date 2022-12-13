@@ -1,0 +1,426 @@
+<!-- Note:
+    This slide have a custom event call slideValueChange
+    event.detail.current() return current relay script change
+    event.detail.all() return all relay scripts
+ -->
+
+ <div class="script__relay-slider__add">
+    {% with direction='left' %}
+    {% include 'components/script/slider-arrow.html' %}
+    {% endwith %}
+    <div class="script__relay-slider__add__wrapper">
+        <div class="script__relay-slider__add__container">
+            {% for relay in relays %}
+            {% include 'components/script/relay-slider-add-item.html' %}
+            {% endfor %}
+        </div>
+    </div>
+    {% with direction='right' %}
+    {% include 'components/script/slider-arrow.html' %}
+    {% endwith %}
+</div>
+
+<script>
+    function runRelaySliderScript() {
+        slideInputScript()
+        slideScript()
+
+        function slideInputScript() {
+            const slider = document.getElementsByClassName('script__relay-slider__add')[0]
+            const relays = document.getElementsByClassName('script__relay-slider__add__container')[0].children
+            const scriptAddRelay = document.getElementById('script__add__add-relay')
+            let relayValue = {}
+
+            const slideValueChange = new CustomEvent('slideValueChange', {
+                detail: {
+                    current: () => relayValue,
+                    all: () => getRelayValues()
+                }
+            })
+
+            scriptAddRelay.addEventListener('change', e => {
+                setTimeout(() => {
+                    slider.dispatchEvent(slideValueChange)
+                }, 0);
+            })
+
+
+            for (let relay of relays) {
+                const relayAdd = relay.getElementsByClassName('script__relay-slider__add__item__header__add')[0]
+                const relayActive = relay.getElementsByClassName('script__relay__switch')[0]
+                fixAdded(isAdded(relay))
+                // fixRelayDelayAndTime()
+                relayAdd.addEventListener('click', (e) => {
+                    if (!isAdded(relay)) {
+                        addRelay(relay)
+                        fixAdded(isAdded(relay))
+                    } else {
+                        removeRelay(relay)
+                        fixAdded(isAdded(relay))
+                    }
+                    generateCustomEvent()
+                })
+                relayActive.addEventListener('input', (e) => {
+                    // fixRelayDelayAndTime()
+                    generateCustomEvent()
+                })
+                // function fixRelayDelayAndTime() {
+                //     if (!relayConfig) {
+                //         if (relayActive.checked && isAdded(relay) && relayOption.checked) {
+                //             relayDelay.disabled = false
+                //             relayTime.disabled = false
+                //             relayConfig.disabled = false
+                //             relayOption.disabled = false
+                //             if (relayDIM) relayDIM.disabled = false
+                //             if (relayCCT) relayCCT.disabled = false
+                //         } else {
+                //             relayDelay.value = ''
+                //             relayTime.value = ''
+                //             if (relayDIM) relayDIM.value = ''
+                //             if (relayCCT) relayCCT.value = ''
+                //             relayDelay.disabled = true
+                //             relayTime.disabled = true
+                //             relayConfig.disabled = true
+                //             relayOption.disabled = true
+                //             if (relayDIM) relayDIM.disabled = true
+                //             if (relayCCT) relayCCT.disabled = true
+                //         }
+                //     }
+                //     else {
+                //         if (relayActive.checked && isAdded(relay) && relayOption.checked && relayConfig.checked) {
+                //             relayDelay.disabled = false
+                //             relayTime.disabled = false
+                //             relayConfig.disabled = false
+                //             relayOption.disabled = false
+                //             if (relayDIM) relayDIM.disabled = false
+                //             if (relayCCT) relayCCT.disabled = false
+                //         }
+                //         else if (relayActive.checked && isAdded(relay) && relayOption.checked && !relayConfig.checked) {
+                //             if (relayDIM) relayDIM.disabled = true
+                //             if (relayCCT) relayCCT.disabled = true
+                //             relayDelay.disabled = false
+                //             relayTime.disabled = false
+                //             relayConfig.disabled = false
+                //             relayOption.disabled = false
+                //         }
+                //         else if (relayActive.checked && isAdded(relay) && !relayOption.checked && relayConfig.checked) {
+                //             if (relayDIM) relayDIM.disabled = false
+                //             if (relayCCT) relayCCT.disabled = false
+                //             relayDelay.disabled = true
+                //             relayTime.disabled = true
+                //             relayConfig.disabled = false
+                //             relayOption.disabled = false
+                //         }
+                //         else if (relayActive.checked && isAdded(relay) && !relayOption.checked && !relayConfig.checked) {
+                //             if (relayDIM) relayDIM.disabled = true
+                //             if (relayCCT) relayCCT.disabled = true
+                //             relayDelay.disabled = true
+                //             relayTime.disabled = true
+                //             relayConfig.disabled = false
+                //             relayOption.disabled = false
+                //         }
+                //         else {
+                //             relayDelay.value = ''
+                //             relayTime.value = ''
+                //             if (relayDIM) relayDIM.value = ''
+                //             if (relayCCT) relayCCT.value = ''
+                //             relayDelay.disabled = true
+                //             relayTime.disabled = true
+                //             relayConfig.disabled = true
+                //             relayOption.disabled = true
+                //             if (relayDIM) relayDIM.disabled = true
+                //             if (relayCCT) relayCCT.disabled = true
+                //         }
+                //     }
+                // }
+
+                function fixAdded(added) {
+                    if (added) {
+                        relayActive.disabled = false
+                        // fixRelayDelayAndTime()
+                    } else {
+                        relayActive.disabled = true
+                    }
+                }
+
+                function generateRelayObject() {
+                    return {
+                        _id: relay.getAttribute('_id'),
+                        active: relayActive.checked,
+                    }
+                }
+
+                function generateCustomEvent() {
+                    relayValue = generateRelayObject()
+                    slider.dispatchEvent(slideValueChange)
+                }
+            }
+
+            function getRelayValues() {
+                const relayValues = []
+                for (let relay of relays) {
+                    const relayActive = relay.getElementsByClassName('script__relay__switch')[0]
+                    if (isAdded(relay))
+                        relayValues.push({
+                            _id: relay.getAttribute('_id'),
+                            active: relayActive.checked,
+                        })
+                }
+                return relayValues
+            }
+
+            function isAdded(relay) {
+                return (relay.classList.contains('script__relay-slider__add__item--added') && relay.style.display !== 'none')
+            }
+
+            function addRelay(relay) {
+                relay.classList.add('script__relay-slider__add__item--added')
+            }
+
+            function removeRelay(relay) {
+                relay.classList.remove('script__relay-slider__add__item--added')
+            }
+        }
+
+        function slideScript() {
+            const relayContainer = document.getElementsByClassName('script__relay-slider__add__container')[0]
+            const arrowLeft = document.getElementsByClassName('script__relay-slider__arrow-left')[0]
+            const arrowRight = document.getElementsByClassName('script__relay-slider__arrow-right')[0]
+
+            var numberOfRelayShow = calculateNumberOfRelayShow()
+            let currentRelay = 0
+            var currentRelayInSlide = currentRelay
+
+            handleSlideMoving()
+
+            function handleSlideMoving() {
+                listenClickEvent()
+                listenResizeEvent()
+                listenNumberOfTotalRelayChange()
+                initializeSlide()
+            }
+
+            function initializeSlide() {
+                currentRelayInSlide = calculateCurrentGatewayInSlide()
+                fixArrowStateToCorrect()
+                scrollSlideToCurrent()
+            }
+
+            function listenClickEvent() {
+                arrowLeft.addEventListener('click', moveSlideToLeft)
+                arrowRight.addEventListener('click', moveSlideToRight)
+            }
+
+            function moveSlideToLeft() {
+                if (tooLittleGateway())
+                    return
+                if (slideIsInBegin()) {
+                } else {
+                    currentRelayInSlide -= 1
+                    scrollSlideToCurrent()
+                }
+                fixArrowStateToCorrect()
+            }
+
+            function moveSlideToRight() {
+                if (tooLittleGateway())
+                    return
+                if (slideIsInEnd()) {
+                } else {
+                    currentRelayInSlide += 1
+                    scrollSlideToCurrent()
+                }
+                fixArrowStateToCorrect()
+            }
+
+
+            function fixArrowStateToCorrect() {
+                if (tooLittleGateway()) {
+                    disableArrowLeft()
+                    disableArrowRight()
+                } else if (slideIsInBegin()) {
+                    disableArrowLeft()
+                    enableArrowRight()
+                } else if (slideIsInEnd()) {
+                    disableArrowRight()
+                    enableArrowLeft()
+                } else {
+                    enableArrowLeft()
+                    enableArrowRight()
+                }
+            }
+
+            function numberOfTotalRelay() {
+                return parseInt(relayContainer.getAttribute('number-of-total-relay'))
+            }
+
+            function scrollSlideToCurrent() {
+                relayContainer.style.transform = `translate(calc(${lengthToScroll()} * ${currentRelayInSlide}))`
+            }
+
+            function lengthToScroll() {
+                return getComputedStyle(relayContainer).getPropertyValue('--length-to-scroll')
+            }
+
+            function slideIsInBegin() {
+                return currentRelayInSlide === 0
+            }
+
+            function slideIsInEnd() {
+                return currentRelayInSlide + numberOfRelayShow >= numberOfTotalRelay()
+            }
+
+            function tooLittleGateway() {
+                return numberOfTotalRelay() <= numberOfRelayShow
+            }
+
+            function disableArrowLeft() {
+                arrowLeft.classList.add('script__relay-slider__arrow--disabled')
+            }
+
+            function disableArrowRight() {
+                arrowRight.classList.add('script__relay-slider__arrow--disabled')
+            }
+
+            function enableArrowLeft() {
+                arrowLeft.classList.remove('script__relay-slider__arrow--disabled')
+            }
+
+            function enableArrowRight() {
+                arrowRight.classList.remove('script__relay-slider__arrow--disabled')
+            }
+
+            function listenResizeEvent() {
+                updateNumberOfGatewayShow()
+                new ResizeObserver(() => {
+                    if (calculateNumberOfRelayShow() != numberOfRelayShow) {
+                        numberOfRelayShow = calculateNumberOfRelayShow()
+                        updateNumberOfGatewayShow()
+                        initializeSlide()
+                    }
+                }).observe(relayContainer)
+            }
+
+            function calculateNumberOfRelayShow() {
+                return Math.floor((relayContainer.offsetWidth - 300) / 250) + 1
+            }
+
+            function updateNumberOfGatewayShow() {
+                relayContainer.style.setProperty('--number-of-relay', numberOfRelayShow)
+            }
+
+            function calculateCurrentGatewayInSlide() {
+                if (tooLittleGateway())
+                    return 0
+                else if (currentRelayInSlide < 0)
+                    return 0
+                else if (currentRelayInSlide > numberOfTotalRelay() - numberOfRelayShow)
+                    return numberOfTotalRelay() - numberOfRelayShow
+                else
+                    return currentRelayInSlide
+            }
+
+            function listenNumberOfTotalRelayChange() {
+                (new MutationObserver(() => {
+                    initializeSlide()
+                })).observe(relayContainer, {
+                    attributes: true,
+                    attributeFilter: ['number-of-total-relay']
+                })
+            }
+        }
+    }
+
+    runRelaySliderScript()
+</script>
+
+<style>
+    .script__relay-slider__add {
+        --gap: 10px;
+        --arrow-width: 30px;
+        --height: 270px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        width: 100%;
+        height: var(--height);
+        gap: var(--gap);
+        padding: 0 var(--gap);
+    }
+
+    .script__relay-slider__add__wrapper {
+        width: calc(100% - var(--gap) * 4 - var(--arrow-width) * 2);
+        height: 100%;
+        overflow: hidden;
+    }
+
+    .script__relay-slider__add__container {
+        --number-of-relay: 1;
+        --relay-width: calc((100% - var(--gap) * (var(--number-of-relay) - 1)) / var(--number-of-relay));
+        --length-to-scroll: calc(0px - (100% - var(--gap) * (var(--number-of-relay) - 1)) / var(--number-of-relay) - var(--gap));
+        display: flex;
+        gap: var(--gap);
+        align-items: center;
+        height: 100%;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .script__relay-slider__add__item {
+        border: 1px solid black;
+        position: relative;
+        flex-shrink: 0;
+        flex-basis: var(--relay-width);
+        display: flex;
+        flex-direction: column;
+        height: calc(100% - 10px);
+        background-color: rgb(192, 192, 192);
+        border-radius: 10px;
+    }
+
+    .script__relay-slider__add__item__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 5px;
+        border-bottom: 1px solid black;
+    }
+
+
+    .script__relay-slider__add__item__header__image img {
+        display: block;
+        width: 50px;
+    }
+
+
+    .script__relay-slider__add__item__header__add {
+        cursor: pointer;
+        font-size: 20px;
+    }
+
+
+    .script__relay-slider__add__item__body .col-4 {
+        padding: 0 5px 0 5px;
+    }
+
+    .script__relay-slider__add__item__body .col-8 {
+        padding: 0 5px 0 0;
+    }
+
+    .script__relay-slider__add__item__switch {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-left: 0;
+    }
+
+    .script__relay-slider__add__item--added {
+        background-color: rgba(184, 255, 251, 0.7);
+    }
+
+    .script__relay-slider__add__item--added .script__relay-slider__add__item__header__add {
+        color: #259FCC;
+    }
+    .option {
+        transform: scale(1.5);
+    }
+</style>
