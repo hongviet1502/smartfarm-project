@@ -16,9 +16,19 @@
         {% for relay in list_relay %}
         {% include 'components/relay/relay-card.html' %}
         {% endfor %}
+
+		<div class="relay__item relay__add">
+            <div class="relay__item__add__container" data-bs-toggle="modal" data-bs-target="#addRelay">
+                <div class="relay__item__add__plus"></div>
+                <div class="relay__item__add__text">Thêm thiết bị</div>
+            </div>
+        </div>
+
     </div>
 </div>
 {% include 'components/relay/delete-relay.html' %}
+{% include 'components/relay/add-relay.html' %}
+{% include 'components/relay/edit-relay.html' %}
 {% block script%}
 <script type="module" src="{{ url_for('static', filename='js/manager/relay/relay.js')}}"></script>
 <script>

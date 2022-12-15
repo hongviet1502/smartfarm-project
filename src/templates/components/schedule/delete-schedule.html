@@ -1,0 +1,55 @@
+<div class="modal fade script__delete" id="deleteSchedule" tabindex="-1" aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Xóa lịch</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn chắc chắn muốn xóa lịch này! Dữ liệu không thể khôi phục được sau khi xóa.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="script__delete__dismiss-button" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="button" class="script__delete__delete-button" id="confirmDeleteSchedule">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .script__delete__delete-button {
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        background: #e92626;
+        color: white;
+    }
+    .script__delete__dismiss-button{
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        /* background: #e92626; */
+        color: black;
+    }
+    .script__delete__dismiss-button:hover,
+    .script__delete__delete-button:hover {
+        filter: brightness(90%);
+    }
+
+    .script__delete__dismiss-button:active,
+    .script__delete__delete-button:active {
+        filter: brightness(80%);
+    }
+    .script__delete__delete-button:disabled {
+        filter: brightness(60%);
+        cursor: wait;
+    }
+
+    .script__delete__delete-button:disabled:hover {
+        filter: brightness(60%);
+    }
+
+    .script__delete__delete-button:disabled:active {
+        filter: brightness(60%);
+    }
+</style> 

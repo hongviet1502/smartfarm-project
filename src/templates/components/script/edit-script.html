@@ -1,4 +1,4 @@
-<div class="modal fade script__edit" id="editScript" tabindex="-1" aria-hidden="true">
+<div class="modal fade script__edit" id="editScript" tabindex="-1" aria-hidden="true" _id="">
     <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -38,7 +38,6 @@
         </div>
     </div>
 </div>
-<p id="id-edit-script" style="display:none ;"></p>
 <script>
     function editScriptScript() {
         const editScript = document.getElementById('editScript')
@@ -74,63 +73,51 @@
         })
 
         editScript.addEventListener('show.bs.modal', (e) => {
-            const idEditScript = $('#id-edit-script').text();
-            console.log(idEditScript);
+            let idEditScript = $('#id-edit-script').text();
             editScript.setAttribute('_id', idEditScript)
-            // scriptName.value = script.name
             addRelayType.value = 'all'
             addRelayType.dispatchEvent(new Event('change'))
-            for (relay of relays) {
-                console.log(1);
-                const relayAdd = relay.getElementsByClassName('script__relay-slider__edit__item__header__add')[0]
-                const relayActive = relay.getElementsByClassName('script__relay__switch')[0]
-                // const relayData = script.execute[relay.getAttribute('_id')]
-                if (relayData) {
-                    if (relayData.pull != 0 ){
-                        relayActive.checked = true
-                    }
-                    else if(relayData.pull != 0 && relayData.delay != 0 && relayData.during != 0){
-                        relayActive.checked = true
-                        relayOption.checked = true
-                        if (relayData.CCT) {
-                            if (relayData.DIM != 100 || relayData.CCT != 100) {
-                                relayConfig.checked = true
+            $.ajax({
+                url: "/setting/editscript/" + idEditScript,
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: 'json',
+                success: function (res) {
+                    scriptName.value = res.nameScript
+                    for (relay of relays) {
+                        removeRelay(relay)
+                        const relayAdd = relay.getElementsByClassName('script__relay-slider__edit__item__header__add')[0]
+                        const relayActive = relay.getElementsByClassName('script__relay__switch')[0]
+                        idRelay = relay.getAttribute("_id")
+                        relayActive.disabled = false
+                        for(let i = 0; i < res['execute'].length; i ++){
+                            if(idRelay == res['execute'][i]['ID']){
+                                addRelay(relay)
+                                if(res['execute'][i]['pull'] == 1){
+                                    relayActive.checked = true
+                                }
+                                else{
+                                    relayActive.checked = false
+                                }
                             }
                         }
-                        else{
-                            if (relayData.DIM != 100) {
-                                relayConfig.checked = true
-                            }
-                        }
                     }
-                    if (!isAdded(relay)) {
-                        relayAdd.dispatchEvent(new Event('click'))
+                    function isAdded(relay) {
+                        return relay.classList.contains('script__relay-slider__edit__item--added')
                     }
-                    relayTime.value = relayData.during
-                    relayDelay.value = relayData.delay
-                    if (relayDIM) relayDIM.value = relayData.DIM
-                    if (relayCCT) relayCCT.value = relayData.CCT
-                } else {
-                    if (isAdded(relay)) {
-                        relayAdd.dispatchEvent(new Event('click'))
+
+                    function addRelay(relay) {
+                        relay.classList.add('script__relay-slider__edit__item--added')
                     }
-                    relayTime.value = ''
-                    relayDelay.value = ''
-                    if (relayDIM) relayDIM.value = ''
-                    if (relayCCT) relayCCT.value = ''
+
+                    function removeRelay(relay) {
+                        relay.classList.remove('script__relay-slider__edit__item--added')
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
                 }
-            }
-            function isAdded(relay) {
-                return relay.classList.contains('script__relay-slider__edit__item--added')
-            }
-
-            function addRelay(relay) {
-                relay.classList.add('script__relay-slider__edit__item--added')
-            }
-
-            function removeRelay(relay) {
-                relay.classList.remove('script__relay-slider__edit__item--added')
-            }
+            })
         })
     }
 
@@ -146,13 +133,15 @@
         background: #0066ff;
         color: white;
     }
-    .script__edit__dismiss-button{
+
+    .script__edit__dismiss-button {
         padding: 5px 30px;
         border-radius: 5px;
         border: none;
         /* background: #2C698D; */
         color: black;
     }
+
     .script__edit__dismiss-button:hover,
     .script__edit__edit-button:hover {
         filter: brightness(90%);

@@ -1,9 +1,17 @@
 from flask import Flask,render_template
 
 import logging
+from logging import Formatter
 # setting log
-logging.basicConfig(level=logging.DEBUG)
+# logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('log.log')
+handler = logging.StreamHandler()
+handler.setFormatter(Formatter(
+    '%(asctime)s %(levelname)s: %(message)s '
+    '[in %(pathname)s:%(lineno)d]'
+))
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
 
 from src.utils.connector import MongoDb_Connector
 from src.utils.MQTT_Connector import MQTT_Connector

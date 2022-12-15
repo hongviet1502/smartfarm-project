@@ -1,0 +1,116 @@
+<div class="modal modal-lg fade relay__edit" id="editRelay" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông tin thiết bị</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-relay-form" class="needs-validation" novalidate>
+                    <div class="container">
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="relay-name" class="form-label">Tên thiết bị:</label>
+                            </div>
+                            <div class="col-9">
+                                <input type="text" class="form-control" id="relay__edit__relay-name">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="relay-type" class="form-label">Loại thiết bị:</label>
+                            </div>
+                            <div class="col-9">
+                                <select class="form-select" id="relay__edit__relay-type" disabled>
+                                    <option value="0">Relay</option>
+                                    <option value="1">Led</option>
+                                    <option value="2">Relay Dimming</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="relay-pin" class="form-label">Chỉ số pin:</label>
+                            </div>
+                            <div class="col-9">
+                                <select class="form-select" id="relay__edit__relay-pin" disabled>
+                                    <option value="16">16</option>
+                                    <option value="5">5</option>
+                                    <option value="4">4</option>
+                                    <option value="2">0</option>
+                                    <option value="2">2</option>
+                                    <option value="14">14</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="15">15</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="relay__edit__dismiss-button" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="submit" class="relay__edit__edit-button" form="edit-relay-form">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function editRelayScript() {
+        const editRelay = document.getElementById('editRelay')
+        const editRelayName = document.getElementById('relay__edit__relay-name')
+        const editRelayPin = document.getElementById('relay__edit__relay-pin')
+
+        editRelay.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget
+            const relay = JSON.parse(button.getAttribute('relay').replace(/\'/g, '"'))
+        
+            editRelay.setAttribute('_id', relay._id)
+            editRelayName.value = relay.name
+            editRelayPin.value = relay.pin
+        })
+    }
+
+    editRelayScript()
+</script>
+
+<style>
+    .relay__edit__edit-button {
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        background: #0066ff;
+        color: white;
+    }
+    .relay__edit__dismiss-button {
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        /* background: #2C698D; */
+        color: black;
+    }
+    .relay__edit__dismiss-button:hover,
+    .relay__edit__edit-button:hover {
+        filter: brightness(90%);
+    }
+
+    .relay__edit__dismiss-button:active,
+    .relay__edit__edit-button:active {
+        filter: brightness(80%);
+    }
+
+    .relay__edit__edit-button:disabled {
+        filter: brightness(60%);
+        cursor: wait;
+    }
+
+    .relay__edit__edit-button:disabled:hover {
+        filter: brightness(60%);
+    }
+
+    .relay__edit__edit-button:disabled:active {
+        filter: brightness(60%);
+    }
+</style> 

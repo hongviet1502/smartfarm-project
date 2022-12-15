@@ -35,7 +35,7 @@
         <div class="script__item__dot" data-bs-toggle="dropdown">
             <i class="fa-solid fa-ellipsis-vertical"></i>
             <ul class="dropdown-menu">
-                <li><a class="dropdown-item script__item__edit" data-bs-toggle="modal" data-bs-target="#editScript" _id = "{{script._id}}" onclick="setEditScriptId('{{script._id}}')">
+                <li><a class="dropdown-item script__item__edit"  _id = "{{script._id}}" onclick="setEditScriptId('{{script._id}}')">
                         <i class="fa-solid fa-pen"></i>
                         <span>Sửa</span>
                     </a></li>
@@ -47,12 +47,16 @@
         </div>
     </div>
 </div>
-
+<p id="id-edit-script" style="display:none ;"></p>
 <script>
     function setScriptId(id){
         $('#id-delete-script').text(id);
     }
     function setEditScriptId(id){
         $('#id-edit-script').text(id);
+        $('#editScript').modal('show')
+    }
+    function getScriptId(id){
+        $('#statusScriptId').val(id);
     }
 </script>

@@ -1,0 +1,135 @@
+<div class="modal modal-lg fade relay__add" id="addRelay" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông tin thiết bị</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="add-relay-form" class="needs-validation" novalidate>
+                    <div class="container">
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="relay-name" class="form-label">Tên thiết bị:</label>
+                            </div>
+                            <div class="col-9">
+                                <input type="text" class="form-control" id="relay__add__relay-name" required>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="relay-type" class="form-label">Loại thiết bị:</label>
+                            </div>
+                            <div class="col-9">
+                                <select class="form-select" id="relay__add__relay-type" required>
+                                    <option value="0">Relay</option>
+                                    <option value="1">Led</option>
+                                    <option value="2">Relay Dimming</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                <label for="relay-pin" class="form-label">Chỉ số pin:</label>
+                            </div>
+                            <div class="col-9">
+                                <select class="form-select" id="relay__add__relay-pin" required>
+                                    <option value="not-selected" selected disabled hidden>Chọn pin</option>
+                                    {% for pin in pins %}
+                                    <option value="{{pin}}">{{pin}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="relay__add__dismiss-button" data-bs-dismiss="modal">Hủy bỏ</button>
+                <button type="submit" class="relay__add__add-button" form="add-relay-form">Thêm mới</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function addRelayScript() {
+        const addRelay = document.getElementById('addRelay')
+        const relayType = document.getElementById('relay__add__relay-type')
+        const relayPin = document.getElementById('relay__add__relay-pin')
+        const RELAY = '0', LED = '1', RELAYDIMMING = '2'
+        let currentPin = relayPin.value
+
+        relayType.addEventListener('input', () => {
+            if (relayType.value == RELAY) {
+                enableInputPin()
+                setRelayPin(currentPin)
+            }
+            else if (relayType.value == RELAYDIMMING){
+                disableInputPin()
+                currentPin = relayPin.value
+                setRelayPin('9')
+            }
+            else {
+                disableInputPin()
+                currentPin = relayPin.value
+                setRelayPin('0')
+            }
+        })
+
+        function setRelayPin(value) {
+            relayPin.value = value
+        }
+
+        function disableInputPin() {
+            relayPin.setAttribute('disabled', '')
+        }
+
+        function enableInputPin() {
+            relayPin.removeAttribute('disabled')
+        }
+    }
+
+    addRelayScript()
+</script>
+
+<style>
+    .relay__add__add-button {
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        background: #0066ff;
+        color: white;
+    }
+
+    .relay__add__dismiss-button {
+        padding: 5px 30px;
+        border-radius: 5px;
+        border: none;
+        /* background: #2C698D; */
+        color: black;
+    }
+    
+    .relay__add__dismiss-button:hover,
+    .relay__add__add-button:hover {
+        filter: brightness(90%);
+    }
+
+    .relay__add__dismiss-button:active,
+    .relay__add__add-button:active {
+        filter: brightness(80%);
+    }
+
+    .relay__add__add-button:disabled {
+        filter: brightness(60%);
+        cursor: wait;
+    }
+
+    .relay__add__add-button:disabled:hover {
+        filter: brightness(60%);
+    }
+
+    .relay__add__add-button:disabled:active {
+        filter: brightness(60%);
+    }
+</style> 

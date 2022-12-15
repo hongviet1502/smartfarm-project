@@ -34,11 +34,11 @@
     <div class="relay__item__dot" data-bs-toggle="dropdown">
         <i class="fa-solid fa-ellipsis-vertical"></i>
         <ul class="dropdown-menu">
-            <li><a class="dropdown-item relay__item__edit" data-bs-toggle="modal" data-bs-target="#editRelay">
+            <li><a class="dropdown-item relay__item__edit" data-bs-toggle="modal" data-bs-target="#editRelay" relay='{{relay}}'>
                     <i class="fa-solid fa-pen"></i>
                     <span>Sửa</span>
                 </a></li>
-            <li><a class="dropdown-item relay__item__delete" data-bs-toggle="modal" data-bs-target="#deleteRelay">
+            <li><a class="dropdown-item relay__item__delete" data-bs-toggle="modal" data-bs-target="#deleteRelay" _id="{{relay._id}}">
                     <i class="fa-solid fa-trash-can"></i>
                     <span>Xóa</span>
                 </a></li>

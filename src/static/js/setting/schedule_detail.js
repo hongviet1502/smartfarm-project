@@ -176,30 +176,30 @@ $(document).ready(function () {
         const path = location.pathname.split("/");
         let url = '/' + path[1] + '/' + path[2] + '/delete/' + data['id'];
 
-        $.ajax({
-            type: "DELETE",
-            url: url,
-            contentType: "application/json;charset=utf-8",
-            data: JSON.stringify(data),
-            dataType: 'json',
-            success: function (response) {
-                if (response['status'] == true) {
-                    $('#deleteSchedule').modal('hide');
-                    showAlert(response['msg'], 'Thêm lịch', 'success');
-                }
-                else {
-                    $('#deleteSchedule').modal('hide');
-                    showAlert(response['msg'], 'Thêm lịch', 'danger');
-                }
-                setTimeout(function () {
-                    window.location.reload();
-                }, 2000)
-            },
-            error: function (error) {
-                $("#wait-load").modal("hide");
-                console.log(error);
-            }
-        });
+        // $.ajax({
+        //     type: "DELETE",
+        //     url: url,
+        //     contentType: "application/json;charset=utf-8",
+        //     data: JSON.stringify(data),
+        //     dataType: 'json',
+        //     success: function (response) {
+        //         if (response['status'] == true) {
+        //             $('#deleteSchedule').modal('hide');
+        //             showAlert(response['msg'], 'Thêm lịch', 'success');
+        //         }
+        //         else {
+        //             $('#deleteSchedule').modal('hide');
+        //             showAlert(response['msg'], 'Thêm lịch', 'danger');
+        //         }
+        //         setTimeout(function () {
+        //             window.location.reload();
+        //         }, 2000)
+        //     },
+        //     error: function (error) {
+        //         $("#wait-load").modal("hide");
+        //         console.log(error);
+        //     }
+        // });
     });
 
     $('#update-schedule').click(function () {

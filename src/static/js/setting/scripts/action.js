@@ -1,5 +1,5 @@
 import showAlert from "../../alert.js";
-import { createScriptApi,deleteScriptApi } from "./api.js";
+import { createScriptApi,deleteScriptApi,updateScriptApi } from "./api.js";
 import { Script, ScriptExecute } from "./model.js";
 
 const script = document.getElementsByClassName('script')[0]
@@ -26,7 +26,7 @@ function handleAddScript() {
         const scriptName = document.getElementById('script__add__script-name')
 
         function newScript() {
-            const scriptData = new Script('', '', 2, [])
+            const scriptData = new Script('', '', [])
             scriptData.setName(scriptName.value)
             scriptsExecute.forEach(scriptExecute => {
                 const newScriptExecute = new ScriptExecute(scriptExecute._id)
@@ -79,64 +79,21 @@ function handleEditScript() {
         const scriptModal = document.getElementById('editScript')
         const scriptName = document.getElementById('script__edit__script-name')
         console.log(scriptModal.getAttribute('_id'));
-        // function newScript() {
-        //     const scriptData = new Script(scriptModal.getAttribute('_id'), '', 2, '', [])
-        //     scriptData.setName(scriptName.value)
-        //     scriptsExecute.forEach(scriptExecute => {
-        //         const newScriptExecute = new ScriptExecute(scriptExecute._id)
-        //         newScriptExecute.setType('Relay')
-        //         if (!scriptExecute.active) {
-        //             newScriptExecute.setPull(0)
-        //             newScriptExecute.setDelay(0)
-        //             newScriptExecute.setDuring(0)
-        //             if (scriptExecute.DIM !== null)
-        //                 newScriptExecute.setDIM(0)
-        //             if (scriptExecute.CCT !== null)
-        //                 newScriptExecute.setCCT(0)
-        //         } else {
-        //             newScriptExecute.setPull(1)
-        //             if (!scriptExecute.option && !scriptExecute.config) {
-        //                 // console.log('no option no config');
-        //                 newScriptExecute.setDelay(0)
-        //                 newScriptExecute.setDuring(0)
-        //                 if (scriptExecute.DIM !== null)
-        //                     newScriptExecute.setDIM(100)
-        //                 if (scriptExecute.CCT !== null)
-        //                     newScriptExecute.setCCT(100)
-        //             }
-        //             else if (scriptExecute.option && !scriptExecute.config) {
-        //                 // console.log(' option no config');
-        //                 newScriptExecute.setDelay(parseInt(scriptExecute.delay))
-        //                 newScriptExecute.setDuring(parseInt(scriptExecute.time))
-        //                 if (scriptExecute.DIM !== null)
-        //                     newScriptExecute.setDIM(100)
-        //                 if (scriptExecute.CCT !== null)
-        //                     newScriptExecute.setCCT(100)
-        //             }
-        //             else if (!scriptExecute.option && scriptExecute.config) {
-        //                 // console.log('no option  config');
-        //                 newScriptExecute.setDelay(0)
-        //                 newScriptExecute.setDuring(0)
-        //                 if (scriptExecute.DIM !== null)
-        //                     newScriptExecute.setDIM(parseInt(scriptExecute.DIM))
-        //                 if (scriptExecute.CCT !== null)
-        //                     newScriptExecute.setCCT(parseInt(scriptExecute.CCT))
-        //             }
-        //             else {
-        //                 // console.log(' option  config');
-        //                 newScriptExecute.setDelay(parseInt(scriptExecute.delay))
-        //                 newScriptExecute.setDuring(parseInt(scriptExecute.time))
-        //                 if (scriptExecute.DIM !== null)
-        //                     newScriptExecute.setDIM(parseInt(scriptExecute.DIM))
-        //                 if (scriptExecute.CCT !== null)
-        //                 newScriptExecute.setCCT(parseInt(scriptExecute.CCT))
-        //             }
-        //         }
-        //         scriptData.addExecute(newScriptExecute)
-        //     })
-        //     return scriptData
-        // }
-
+        function newScript() {
+            const scriptData = new Script(scriptModal.getAttribute('_id'), '', [])
+            scriptData.setName(scriptName.value)
+            scriptsExecute.forEach(scriptExecute => {
+                const newScriptExecute = new ScriptExecute(scriptExecute._id)
+                newScriptExecute.setType('Relay')
+                if (!scriptExecute.active) {
+                    newScriptExecute.setPull(0)
+                } else {
+                    newScriptExecute.setPull(1)
+                }
+                scriptData.addExecute(newScriptExecute)
+            })
+            return scriptData
+        }
         try {
             disabledSubmitButton(editButton)
             const response = await updateScriptApi(newScript())

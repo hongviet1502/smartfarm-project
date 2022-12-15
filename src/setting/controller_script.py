@@ -90,3 +90,37 @@ def create_script():
         else:
             status['msg'] = "Tạo kịch bản thất bại"
         return jsonify(status)
+
+@scripts.route("/editscript/<idScript>", methods=["GET", "UPDATE", "POST"])
+def get_edit_scipts(idScript):
+    if request.method == "GET":
+        try:
+            script = getScript(idScript)
+            response = {}
+            response['nameScript'] = script['name']
+            response['execute'] = script['execute']
+            return jsonify(response)
+        except Exception as e:
+            logger.error(e)
+            return render_template("page404.html")
+
+
+@scripts.route("/script/edit/<id_script>", methods=["POST"])
+def edit_script(id_script):
+    data = request.get_json()
+    isUpdated = db.update_record(
+                    'scripts',
+                    {"_id": ObjectId(id_script)},
+                    { "$set": data
+                    }
+                )
+    if isUpdated:
+        return jsonify(
+            {"status": True, "msg": "Cập nhật thông tin kịch bản thành công!"}
+        )
+    return jsonify(
+        {
+            "status": False,
+            "msg": "Cập nhật thông tin kịch bản thất bại!",
+        }
+    )

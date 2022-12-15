@@ -42,13 +42,11 @@ class ScriptExecute {
 class Script {
     #id
     #name
-    #type
     #executes
-    constructor(id, name, type, executes) {
+    constructor(id, name, executes) {
         this.validateId(id)
         this.#id = id
         this.#name = name
-        this.#type = type
         this.#executes = executes
     }
 
@@ -67,13 +65,6 @@ class Script {
             throw new Error('Tên kịch bản quá dài')
         return true
     }
-
-    validateType(type) {
-        if (![0, 1, 2].includes(type))
-            throw new Error('Type phải bằng 0(schedule) hoặc 1(rule) hoặc 2(script)')
-        return true
-    }
-
     validateExecutes(executes) {
         if (!(executes instanceof Array))
             throw new Error('Execute phải là array')
@@ -92,10 +83,6 @@ class Script {
         return this.#name
     }
 
-    getType() {
-        return this.#type
-    }
-
     getExecutes() {
         return this.#executes
     }
@@ -103,11 +90,6 @@ class Script {
     setName(name) {
         this.validateName(name)
         this.#name = name
-    }
-
-    setType(type) {
-        this.validateType(type)
-        this.#type = type
     }
 
     setExecutes(executes) {
