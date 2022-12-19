@@ -6,10 +6,11 @@ $(document).ready(function () {
             try {
                 e.target.disabled = true
                 // get type relay
-                var typeRelay = switchRelayStatusButton.getAttribute('device')
-                var nameRelay = switchRelayStatusButton.getAttribute('name')
+                var pinRelay = switchRelayStatusButton.getAttribute('pin')
+                var idRelay = switchRelayStatusButton.getAttribute('_id')
+                console.log(pinRelay,idRelay);
                 if (switchRelayStatusButton.checked == true) {
-                    const response = await changeRelayStatusApi(nameRelay, typeRelay, 1)
+                    const response = await changeRelayStatusApi(idRelay, pinRelay, 1)
                     //handle response
                     if (response['status'] !== true)
                         throw new Error(response.message)
@@ -18,7 +19,7 @@ $(document).ready(function () {
                     showToast('Thay đổi trạng thái thiết bị thành công', 'Thay đổi trạng thái', 'success')
                 }
                 else {
-                    const response = await changeRelayStatusApi(nameRelay, typeRelay, 0)
+                    const response = await changeRelayStatusApi(idRelay, pinRelay, 0)
                     //handle response
                     if (response['status'] !== true)
                         throw new Error(response.message)
@@ -34,15 +35,15 @@ $(document).ready(function () {
         })
     }
 
-    function changeRelayStatusApi(name, typeRelay, pull) {
+    function changeRelayStatusApi(idRelay, pinRelay, pull) {
         return new Promise((resolve, reject) => {
             $.ajax({
                 type: "POST",
                 url: "/manager/relay",
                 contentType: "application/json;charset=utf-8",
                 data: JSON.stringify({
-                    name: name,
-                    type: typeRelay,
+                    idRelay: idRelay,
+                    pin: pinRelay,
                     pinMode: pull
                 }),
                 dataType: 'json',

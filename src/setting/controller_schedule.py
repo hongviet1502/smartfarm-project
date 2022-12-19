@@ -6,7 +6,7 @@ import json
 
 schedule = Blueprint('schedule', __name__)
 
-@schedule.route('/schedule', methods = ['GET','POST','PATCH'])
+@schedule.route('/schedule', methods = ['GET','POST','PATCH','DELETE'])
 def load_init_schedule():
 
     if request.method == 'GET':
@@ -19,6 +19,7 @@ def load_init_schedule():
             logger.error(e)
             return render_template("page404.html")    
     if request.method == 'POST':
+        """Create new schedules"""
         try:
             status = {}
             data = request.get_json()
@@ -39,6 +40,7 @@ def load_init_schedule():
             return render_template("page404.html")    
 
     if request.method == 'PATCH':
+        """handle control scripts"""
         try:
             status = {}
             data = request.get_json()
@@ -59,4 +61,66 @@ def load_init_schedule():
             return jsonify(status)
         except Exception as e:
             logger.error(e)
-            return render_template("page404.html")    
+            return render_template("page404.html") 
+    if request.method == 'DELETE':
+        """handle delete schedule request"""
+        try:
+            data = request.get_json()
+            isDeleted = db.delete_record('schedules',{"_id": ObjectId(data['id'])})
+            if isDeleted:
+                return jsonify({"status": True, "msg": "Xoá thành công lịch điều khiển!"})
+            return jsonify({"status": False, "msg": "Không thể xoá lịch. Vui lòng thử lại sau!"})
+        except Exception as e:
+            logger.error(e)
+            return render_template("page404.html")       
+
+@schedule.route('/schedule/edit/<ID>', methods = ['GET', 'UPDATE'])
+def edit_schedule(ID):
+    if request.method == 'GET':
+        """get schedule data to edit"""
+        try:
+            schedule = db.select_records("schedules", {"_id" : ObjectId(ID)})[0]
+            record = []
+            data = {
+                '_id': str(schedule['_id']),
+                'active': schedule['active'],
+                'name':schedule['name'],
+                'time': str(schedule['time'])
+            }
+            record.append(data)
+            for i in range(0, len(schedule['execute'])):
+                execute ={
+                    'ID': str((schedule['execute'])[i]['ID']),
+                    'pull': (schedule['execute'])[i]['pull'],
+                    'type': (schedule['execute'])[i]['type']
+                }
+                record.append(execute)
+            return jsonify(record)
+       
+        except Exception as e:
+            logger.error(e)
+            return render_template("page404.html")
+
+    else :
+        """Edit schedule"""
+        data = request.get_json()
+        timeArray = data['time'].split('T')
+        date = timeArray[0].split("-")
+        time = timeArray[1].split(":")
+        data['time'] = datetime.datetime(int(date[0]), int(date[1]),int(date[2]),int(time[0]),int(time[1]))
+        isUpdated = db.update_record(
+                        'schedules',
+                        {"_id": ObjectId(ID)},
+                        { "$set": data
+                        }
+                    )
+        if isUpdated:
+            return jsonify(
+                {"status": True, "msg": "Cập nhật thông tin lịch thành công!"}
+            )
+        return jsonify(
+            {
+                "status": False,
+                "msg": "Cập nhật thông tin lịch thất bại!",
+            }
+        )

@@ -228,7 +228,7 @@
         color: white;
     }
 
-    .btn-dismiss{
+    .btn-dismiss {
         background-color: #e1e1e1;
     }
 
@@ -607,4 +607,22 @@
         }
     });
 
+    function loopCheckSchedule() {
+        return new Promise((resolve, reject) => {
+            $.ajax({
+                url: "/home/runSchedule",
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: 'json',
+                success: function (res) {
+                    // console.log(res);
+                    resolve(res)
+                },
+                error: function (err) {
+                    reject(err)
+                }
+            })
+        })
+    }
+    setInterval(loopCheckSchedule,60000)
 </script>

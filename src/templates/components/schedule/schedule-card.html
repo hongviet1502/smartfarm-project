@@ -51,7 +51,7 @@
                                 <i class="fa-solid fa-pen"></i>
                                 <span>Sửa</span>
                             </a></li>
-                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteSchedule" id="deleteScheduleId">
+                        <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteSchedule" id="deleteScheduleId" onclick="getDeleteScheduleId('{{schedule._id}}')">
                                 <i class="fa-solid fa-trash-can"></i>
                                 <span>Xóa</span>
                             </a></li>
@@ -70,7 +70,6 @@ function getDeleteScheduleId(id){
 
 function getScheduleId(id){
     $('#scheduleId').val(id);
-    var count = 1;
     const path = location.pathname.split("/");
     let url = '/' + path[1] + '/' + path[2] + '/edit/' + id;
     $.ajax({
@@ -80,44 +79,14 @@ function getScheduleId(id){
         data: JSON.stringify(id),
         dataType: 'json',
         success: function(data) {
-            // console.log(data)
+            console.log(data)
             $("input:text").val(data[0]['name']);  
-            // $("#appt_update").val(data[0]['input']['schedule']['timeStart']); 
-            // console.log(data[0]['input']['schedule'])
-            
-            // editTimeSchedule = document.getElementsByClassName("edit__time__schedule")
-            // console.log(editTimeSchedule);
+            timeArr = data[0]['time'].split(" ")
+            time = timeArr[0]+'T'+timeArr[1]
+            console.log(time);
+            $(".edit-apptStart").val(time) 
             let element = []
-            for(let i = 0; i < data[0]['input']['schedule']['timeStart'].length; i++){
-                element[i] = `  <tr>
-                                    <td><input type="time" class="form-control editApptStart" name="appt" id="${i + 11}"
-                                            onchange="getTimeStartEdit()" value="${data[0]['input']['schedule']['timeStart'][i]}" required></td>
-                                    <td><div style="margin-top: 4%;"></i></div></td>
-                                    <td><input type="time" class="form-control editApptStop" name="apptEnd" id="${i+16}"
-                                            onchange="getTimeStopEdit()" value="${data[0]['input']['schedule']['timeStop'][i]}" required></td>
-                                    <td>
-                                        <div class="remove" _id="1" style="margin-top: 6%;">
-                                            <a><i class="fa-solid fa-trash-can"></i></a>
-                                        </div>
-                                    </td>
-                                </tr>`
-
-            }
-            $('.edit__time__schedule').html(element)
-            getTimeStartEdit();
-            getTimeStopEdit();
             
-            var days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-            var dayvalue = ['2', '3', '4', '5', '6', '7', 'CN']
-
-            for (let i = 0; i < days.length; i++){
-                if ((data[0]['input']['loop'][days[i]]) == true){
-                    $(`#editSchedule #${dayvalue[i]}`).val('1');
-                    $(`#editSchedule #${dayvalue[i]}`).css('background-color', '#0066ff');
-                    $(`#editSchedule #${dayvalue[i]}`).css('color', 'white');
-                }
-            }
-
             $('.schedule__device-update').find('.schedule__device__item__plus-circle').each(function(){
                 for (let i = 1; i < data.length; i++ ){
                     if($(this).attr('_id') == data[i]['ID']){
@@ -126,13 +95,11 @@ function getScheduleId(id){
                         $(this).attr('value', '1')
                         $(this).parent().parent().removeClass("not-used-schedule-update")
                         $(this).parent().parent().addClass("used-schedule-update")
-                        $(this).parent().parent().find('input').prop("disabled", true)
+                        $(this).parent().parent().find('input').prop("disabled", false)
 
-                        if(data[i]['pull'] == '1'){
+                        if(data[i]['pull'] == 1){
                             $(this).parent().parent().find('.schedule__relay__switch').attr('value', '1')
                             $(this).parent().parent().find('.schedule__relay__switch').prop("checked", true)
-                            $(this).parent().parent().find('.DIM').attr('value', `${data[i]['dim']}`)
-                            $(this).parent().parent().find('.CCT').attr('value', `${data[i]['cct']}`)
                         }
                     }
                 }

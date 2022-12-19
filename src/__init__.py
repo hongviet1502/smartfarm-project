@@ -2,8 +2,8 @@ from flask import Flask,render_template
 
 import logging
 from logging import Formatter
+
 # setting log
-# logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('log.log')
 handler = logging.StreamHandler()
 handler.setFormatter(Formatter(
@@ -44,4 +44,3 @@ app.register_blueprint(sensor, url_prefix='/manager')
 app.register_blueprint(relay, url_prefix='/manager')
 app.register_blueprint(scripts, url_prefix='/setting')
 app.register_blueprint(schedule, url_prefix='/setting')
-

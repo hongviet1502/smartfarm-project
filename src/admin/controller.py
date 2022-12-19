@@ -1,13 +1,14 @@
 from flask import Blueprint,render_template,request,jsonify
-from datetime import date
-import datetime
-from src import logger,db
+from datetime import date,datetime
+import json
+from src import db, logger, mqtt, client
 from src.utils.get_data import *
 # from src import db
 admin = Blueprint('admin', __name__)
 
 @admin.route("/home/")
 def get_home_page():
+    """Return homepage"""
     sensors = getSensors()
     relays = getRelays()
     for sensor in sensors:
@@ -58,7 +59,57 @@ def get_chart_info(sensorName):
         return render_template("page404.html")
 
 def convert2label(date, full = True):
+    """Function that convert time from database to time can be use to draw chart"""
     y, m, d, h, minn, sec, msec, _, _ = date.timetuple()
 
     if full:
         return "{}-{}-{} {}:{}:{}".format(y,m,d,h,minn,sec)
+
+@admin.route("/home/runSchedule",  methods = ['POST'])
+def handle_schedule():
+    """this funtion is call by http post every 60s to run schedules"""
+    # select all schedules that active in dtb
+    scheduleActive = db.select_records('schedules',{'active':1})
+    for schedule in scheduleActive:
+        scheduleDatetime = schedule['time']
+        # convert time of type datetime in dtb to timestamp
+        scheduleTimestamp = int(round(scheduleDatetime.timestamp()))
+
+        curr_dt = datetime.now()
+        # get now timestamp
+        curr_timestamp = int(round(curr_dt.timestamp()))
+        
+        # if reach time, do schedule
+        if(curr_timestamp - scheduleTimestamp) >= 0 :
+            dataControl = {}
+            dataControl['mode'] = 3
+            dataControl['control'] = []
+            # get infor of each relay in schedule execute
+            for relay in schedule['execute']:
+                relayInfor = getRelay(relay['ID'])
+                relayControl = {}
+                relayControl['pin'] = relayInfor['pin']
+                relayControl['pull'] = relay['pull']
+                dataControl['control'].append(relayControl)
+            # send data control relay to broker
+            dataControl = json.dumps(dataControl)
+            dataSendStatus = mqtt.publish(client,"esp8266/controlschedules",dataControl)
+            #if send okay, update dtb
+            if dataSendStatus == 0:
+                db.update_record(
+                        'schedules',
+                        {"_id": ObjectId(schedule['_id'])},
+                        { "$set": {'active': 0}
+                        }
+                    )
+                
+                for relay in schedule['execute']:
+                    db.update_record(
+                        "relays",
+                        {"_id": ObjectId(relay['ID'])},
+                        {
+                            "$set": {'status': relay['pull']}
+                        }
+                    )
+                return jsonify({'status':'send ok'})
+    return jsonify({'status':'send false'})

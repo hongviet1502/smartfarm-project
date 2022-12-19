@@ -27,7 +27,7 @@ def handle_relay():
     elif request.method == 'POST':  # change relay status (on/off)
         try:
             data = request.get_json()
-            data['type'] = int(data['type'])
+            data['pin'] = int(data['pin'])
             data['mode'] = 1
             data = json.dumps(data)
             # public to topic control device
@@ -37,7 +37,7 @@ def handle_relay():
                 data = json.loads(data)
                 db.update_record(
                     'relays',
-                    {"name": data['name']},
+                    {"_id": ObjectId(data['idRelay'])},
                     {"$set": {
                         "status": data['pinMode'],
                     }

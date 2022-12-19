@@ -11,7 +11,7 @@
                         <span class="relay__control--text">OFF</span>
                         <label class="switch">
                             <input class="relay__item__switch-button__input" type="checkbox" {% if relay.status==1 %}
-                                checked {% endif %} device="{{relay.type}}" name="{{relay.name}}">
+                                checked {% endif %} pin="{{relay.pin}}" _id="{{relay._id}}">
                             <span class="slider round"></span>
                         </label>
                         <span class="relay__control--text">ON</span>

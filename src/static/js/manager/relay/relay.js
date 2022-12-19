@@ -8,10 +8,10 @@ for (let switchRelayStatusButton of switchRelayStatusButtons) {
         try {
             e.target.disabled = true
             // get type relay
-            var typeRelay = switchRelayStatusButton.getAttribute('device')
-            var nameRelay = switchRelayStatusButton.getAttribute('name')
+            var pinRelay = switchRelayStatusButton.getAttribute('pin')
+            var idRelay = switchRelayStatusButton.getAttribute('_id')
             if(switchRelayStatusButton.checked == true){
-                const response = await changeRelayStatusApi(nameRelay, typeRelay, 1)
+                const response = await changeRelayStatusApi(idRelay, pinRelay, 1)
                 //handle response
                 if (response['status'] !== true)
                 throw new Error(response.message)
@@ -20,7 +20,7 @@ for (let switchRelayStatusButton of switchRelayStatusButtons) {
             showAlert('Thay đổi trạng thái thiết bị thành công', 'Thay đổi trạng thái', 'success')
             }   
             else{
-                const response = await changeRelayStatusApi(nameRelay, typeRelay, 0)
+                const response = await changeRelayStatusApi(idRelay, pinRelay, 0)
                 //handle response
                 if (response['status'] !== true)
                 throw new Error(response.message)

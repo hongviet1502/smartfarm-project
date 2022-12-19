@@ -4,6 +4,7 @@ from src import logger
 # public broker information
 broker = 'localhost'
 # broker = 'broker.emqx.io'
+# broker = "broker.hivemq.com"
 port = 1883
 topic = "esp8266/smartfarmviet"
 client_id = f'python-mqtt-{random.randint(0, 1000)}'

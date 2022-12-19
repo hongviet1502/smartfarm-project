@@ -1,15 +1,15 @@
 import Relay from './model.js'
 
 // API request change relay status on or off
-function changeRelayStatusApi(name, typeRelay, pull) {
+function changeRelayStatusApi(idRelay, pinRelay, pull) {
     return new Promise((resolve, reject) => {
         $.ajax({
             type: "POST",
             url: "/manager/relay",
             contentType: "application/json;charset=utf-8",
             data: JSON.stringify({
-                name: name,
-                type: typeRelay,
+                idRelay: idRelay,
+                pin: pinRelay,
                 pinMode: pull
             }),
             dataType: 'json',

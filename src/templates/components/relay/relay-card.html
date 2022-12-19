@@ -14,8 +14,8 @@
                 class="form-check-input relay__item__switch-button__input"
                 type="checkbox"
                 role="switch"
-                device = "{{relay.type}}"
-                name = "{{relay.name}}"
+                pin = "{{relay.pin}}"
+                _id = "{{relay._id}}"
                 {% if relay.status == 1 %} checked {% endif %}
             >
             <p>ON</p>

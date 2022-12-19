@@ -7,6 +7,7 @@ sensor = Blueprint('sensor', __name__)
 
 @sensor.route('/sensor', methods=['GET', 'POST', 'UPDATE', 'DELETE', 'PUT', 'DETAIL'])
 def load_init_sensor():
+    """Return sensor page"""
     if request.method == 'GET':
         try:
             list_sensor = getSensors()
@@ -17,25 +18,6 @@ def load_init_sensor():
         except Exception as e:
             logger.error(e)
             return render_template("page404.html")
-    # elif request.method == 'POST':
-    #     try:
-    #         data = request.get_json()
-    #         # print(data)
-    #         data = json.dumps(data)
-    #         dataSendStatus = mqtt.publish(client,"esp8266/controldevice",data)
-    #         if(dataSendStatus == 0):
-    #             return jsonify({
-    #                 "msg":"dieu khien thanh cong",
-    #                 "status": True
-    #                 })
-    #         else:
-    #             return jsonify({
-    #                 "msg":"dieu khien that bai",
-    #                 "status": False
-    #                 })
-    #     except Exception as e:
-    #         logger.error(e)
-    #         return render_template("page404.html")
 
 @sensor.route('/temphumisensorvalue', methods=['GET', 'POST', 'UPDATE', 'DELETE', 'PUT', 'DETAIL'])
 def save_sensor_data():
@@ -51,13 +33,11 @@ def save_sensor_data():
         # khoi tao 2 ban ghi nhiet do va do am
         tempRecord = {}
         tempRecord['value'] = temperature
-        # tempRecord['type'] = 1
         tempRecord['time'] = updateTime
         tempRecord['sensorName'] = "CB Nhiet do"
 
         humiRecord = {}
         humiRecord['value'] = humidity
-        # humiRecord['type'] = 2
         humiRecord['time'] = updateTime
         humiRecord['sensorName'] = "CB Do am"
         # Luu du lieu vao dtb
@@ -85,7 +65,7 @@ def save_sensor_data():
         if tempInsertStatus == False :
            logger.error('insert temp data fail')
         if humiInsertStatus == False :
-           logger.error('insert temp data fail')
+           logger.error('insert humi data fail')
         if tempInsertStatus and humiInsertStatus:
             logger.info('inserted')
             return "Received"

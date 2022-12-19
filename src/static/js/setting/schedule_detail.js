@@ -139,7 +139,7 @@ $(document).ready(function () {
                 let obj = {};
                 obj['type'] = 'Relay';
                 obj['ID'] = $(this).find('.schedule__device__item__plus-circle').attr('_id');
-                obj['pull'] = $(this).find('.schedule__relay__switch').val();
+                obj['pull'] = parseInt($(this).find('.schedule__relay__switch').val());
                 data['execute'].push(obj);
             }
         });
@@ -172,139 +172,81 @@ $(document).ready(function () {
     $('#confirmDeleteSchedule').click(function () {
         let data = {};
         data['id'] = $('#deleteScheduleId').val();
+        console.log(data);
+        let url = "/setting/schedule"
 
-        const path = location.pathname.split("/");
-        let url = '/' + path[1] + '/' + path[2] + '/delete/' + data['id'];
-
-        // $.ajax({
-        //     type: "DELETE",
-        //     url: url,
-        //     contentType: "application/json;charset=utf-8",
-        //     data: JSON.stringify(data),
-        //     dataType: 'json',
-        //     success: function (response) {
-        //         if (response['status'] == true) {
-        //             $('#deleteSchedule').modal('hide');
-        //             showAlert(response['msg'], 'Thêm lịch', 'success');
-        //         }
-        //         else {
-        //             $('#deleteSchedule').modal('hide');
-        //             showAlert(response['msg'], 'Thêm lịch', 'danger');
-        //         }
-        //         setTimeout(function () {
-        //             window.location.reload();
-        //         }, 2000)
-        //     },
-        //     error: function (error) {
-        //         $("#wait-load").modal("hide");
-        //         console.log(error);
-        //     }
-        // });
+        $.ajax({
+            type: "DELETE",
+            url: url,
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            success: function (response) {
+                if (response['status'] == true) {
+                    $('#deleteSchedule').modal('hide');
+                    showAlert(response['msg'], '', 'success');
+                }
+                else {
+                    $('#deleteSchedule').modal('hide');
+                    showAlert(response['msg'], '', 'danger');
+                }
+                setTimeout(function () {
+                    window.location.reload();
+                }, 2000)
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
     });
-
+    // -------------------------Edit schedule--------------------------------
     $('#update-schedule').click(function () {
         var id = $('#scheduleId').val();
-        var flagSend = false;
-        record = recordTimeEdit();
-        flagSend = checkValueRecord(record);
-
         $("#editSchedule").modal('hide');
         let data = {};
         if ($(".schedule__update__schedule-name").val() == '') {
             showAlert('Tên lịch không được bỏ trống và không trùng với các lịch khác.', 'Thêm lịch', 'danger');
         }
-        if ((record[0]['timeStart'].length == 0) || (record[0]['timeStop'].length == 0)) {
-            showAlert('Lịch được tạo cần thiết lập thời gian hoạt động.', 'Thêm lịch', 'danger');
-        }
-        // else{
-        //     for(var i = 0; i < (record[0]['timeStart'].length); i++){
-        //         if(record[0]['timeStart'][i] > record[0]['timeStop'][i]){
-        //             flagSend = false;
-        //             showAlert('Thời gian bắt đầu phải nhỏ hơn thời gian kết thúc!','Thêm lịch', 'danger');
-        //             break;
-        //         }
-        //         else{
-        //             flagSend = true;
-        //         }
-        //     };
-        // }
-        if ($(".schedule__update__schedule-name").val() != '' && (record[0]['timeStart'].length != 0) && (record[0]['timeStop'].length != 0) && (flagSend == true)) {
-            data['name'] = $(".schedule__update__schedule-name").val();
+        data['time'] = $(".edit-apptStart").val()
+        data['name'] = $(".schedule__update__schedule-name").val()
+        data['execute'] = []
+        $('.schedule__device-update').each(function () {
 
-            data['greenhouseId'] = $('.schedule__container').attr("id");
-            if (data['greenhouseId'] == null) {
-                data['greenhouseId'] = $('.schedule__item__add__plus').attr("id");
+            if ($(this).find('.schedule__device__item__plus-circle').attr('value') == '1') {
+                let obj = {};
+                obj['type'] = 'Relay';
+                obj['ID'] = $(this).find('.schedule__device__item__plus-circle').attr('_id');
+                obj['pull'] = parseInt($(this).find('.schedule__relay__switch').val());
+                data['execute'].push(obj);
             }
-            // Input
-            data['input'] = {};
-            data['input']['loop'] = {};
-            data['input']['schedule'] = {};
+        });
 
-            data['input']['schedule'] = record[0];
+        console.log(data)
 
-            let keys = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
-            let values = [];
-            $(".day-update").each(function () {
-                if ($(this).val() == '0')
-                    values.push(false);
-                else values.push(true);
-            });
-            for (let i = 0; i < keys.length; i++) {
-                data['input']['loop'][keys[i]] = values[i];
+        const path = location.pathname.split("/");
+        let url = '/' + path[1] + '/' + path[2] + '/edit/' + id;
+
+        $.ajax({
+            type: "UPDATE",
+            url: url,
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            success: function (response) {
+                if (response['status'] == true) {
+                    showAlert(response['msg'], 'Sửa lịch', 'success');
+                }
+                else {
+                    showAlert(response['msg'], 'Sửa lịch', 'danger');
+                }
+                setTimeout(function () {
+                    window.location.reload();
+                }, 2000)
+            },
+            error: function (error) {
+                console.log(error);
             }
-
-            // Execute
-            data['execute'] = []
-
-            $('.schedule__device-update').each(function () {
-
-                if ($(this).find('.schedule__device__item__plus-circle').attr('value') == '1') {
-                    let obj = {};
-
-                    obj['type'] = 'Relay';
-                    obj['ID'] = $(this).find('.schedule__device__item__plus-circle').attr('_id');
-                    obj['pull'] = $(this).find('.schedule__relay__switch').val();
-                    if ($(this).find('.schedule__light').length) {
-                        obj['DIM'] = Number($(this).find('.DIM').val());
-                        check_valid_value(obj['DIM'], 0, 100);
-                        obj['CCT'] = Number($(this).find('.CCT').val());
-                        check_valid_value(obj['CCT'], 0, 100);
-                    }
-                    if ($(this).find('.schedule__dim').length) {
-                        obj['DIM'] = Number($(this).find('.DIM').val());
-                        check_valid_value(obj['DIM'], 0, 100);
-                    }
-                    data['execute'].push(obj);
-                }
-            });
-
-            console.log(data)
-
-            const path = location.pathname.split("/");
-            let url = '/' + path[1] + '/' + path[2] + '/edit/' + id;
-
-            $.ajax({
-                type: "UPDATE",
-                url: url,
-                contentType: "application/json;charset=utf-8",
-                data: JSON.stringify(data),
-                dataType: 'json',
-                success: function (response) {
-                    if (response['status'] == true) {
-                        showAlert(response['msg'], 'Sửa lịch', 'success');
-                    }
-                    else {
-                        showAlert(response['msg'], 'Sửa lịch', 'danger');
-                    }
-                    setTimeout(function () {
-                        window.location.reload();
-                    }, 2000)
-                },
-                error: function (error) {
-                    console.log(error);
-                }
-            });
-        }
+        });
     });
 
     $('.schedule__item__status__switch').click(function () {

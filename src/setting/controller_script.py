@@ -22,22 +22,33 @@ def load_home_scripts_page():
         try:
             data = request.get_json()
             response = {}
-            script = getScript(data['id'])
-
+            script = getScript(data['id']) #get the scripts by id
+            
+            #initialize dataControl to send to broker
             dataControl = {}
             dataControl['mode'] = 2
             dataControl['control'] = []
+            #loop through relays in execute
             for relay in script['execute']:
                 relayInfor = getRelay(relay['ID'])
                 relayControl = {}
-                relayControl['type'] = relayInfor['type']
+                relayControl['pin'] = relayInfor['pin']
                 relayControl['pull'] = relay['pull']
                 dataControl['control'].append(relayControl)
-
+            #send to broker
             dataControl = json.dumps(dataControl)
             isPublished = mqtt.publish(client,"esp8266/controlscripts",dataControl)
             response['status'] =isPublished
             if(isPublished == 0):
+                #update dtb
+                for relay in script['execute']:
+                    db.update_record(
+                        "relays",
+                        {"_id": ObjectId(relay['ID'])},
+                        {
+                            "$set": {'status': relay['pull']}
+                        }
+                    )
                 response['msg'] = "Thay đổi trạng thái kịch bản thành công"
             else:
                 response['msg'] = "Thay đổi trạng thái kịch bản thất bại"
@@ -93,6 +104,7 @@ def create_script():
 
 @scripts.route("/editscript/<idScript>", methods=["GET", "UPDATE", "POST"])
 def get_edit_scipts(idScript):
+    """get scripts data to edit """
     if request.method == "GET":
         try:
             script = getScript(idScript)
@@ -107,6 +119,7 @@ def get_edit_scipts(idScript):
 
 @scripts.route("/script/edit/<id_script>", methods=["POST"])
 def edit_script(id_script):
+    """update new scripts in for"""
     data = request.get_json()
     isUpdated = db.update_record(
                     'scripts',
