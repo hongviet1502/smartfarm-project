@@ -2,8 +2,8 @@ from paho.mqtt import client as mqtt_client
 import time, random
 from src import logger
 # public broker information
-broker = 'localhost'
-# broker = 'broker.emqx.io'
+# broker = 'localhost'
+broker = 'broker.emqx.io'
 # broker = "broker.hivemq.com"
 port = 1883
 topic = "esp8266/smartfarmviet"
