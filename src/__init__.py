@@ -1,3 +1,4 @@
+from flask_socketio import SocketIO, emit, join_room
 from flask import Flask,render_template
 
 import logging
@@ -18,7 +19,7 @@ from src.utils.MQTT_Connector import MQTT_Connector
 from ini_config import config
 import time
 app = Flask(__name__)
-
+socketio = SocketIO(app, cors_allowed_origins="*")
 # connect public mqtt emqx
 mqtt = MQTT_Connector
 client = mqtt.connect_mqtt()
@@ -44,3 +45,18 @@ app.register_blueprint(sensor, url_prefix='/manager')
 app.register_blueprint(relay, url_prefix='/manager')
 app.register_blueprint(scripts, url_prefix='/setting')
 app.register_blueprint(schedule, url_prefix='/setting')
+
+
+@socketio.on('joined', namespace='/listen')
+def joined(message):
+    """Sent by clients when they enter a room.
+    A status message is broadcast to all people in the room."""
+    logger.info(message)
+    # emit('status', {'msg': 'socket joined...' })
+
+@socketio.on('update', namespace='/listen')
+def text(message):
+    """Sent by a client when the user entered a new message.
+    The message is sent to all people in the room."""
+    # logger.info("messsssssssssss"+message)
+    emit('joined', {'roomJoind': message})

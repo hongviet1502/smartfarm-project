@@ -185,3 +185,5 @@ $('.script__item__status__switch').click(function(){
         }
     });
 })
+
+//socket

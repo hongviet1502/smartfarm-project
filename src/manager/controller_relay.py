@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request, render_template
-from src import db, logger, mqtt, client
+from src import db, logger, mqtt, client,socketio,emit
 from src.utils.get_data import *
 import datetime
 import json
@@ -43,6 +43,10 @@ def handle_relay():
                     }
                     }
                 )
+                # emit('update',  {'msg': 'test socket relay'})
+                # @socketio.on('update')
+                # def handle_my_custom_event(message):
+                #     emit('my response', "test update")
                 return jsonify({
                     "msg": "dieu khien thanh cong",
                     "status": True
